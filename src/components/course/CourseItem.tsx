@@ -1,9 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
-import IconStar from "../icons/IconStar";
-import IconClock from "../icons/IconClock";
-import IconEye from "../icons/IconEye";
+import {IconEye, IconStar, IconClock} from "@/components/icons";
 
 const CourseItem = () => {
   const courseInfo = [

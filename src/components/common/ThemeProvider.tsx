@@ -7,5 +7,7 @@ export function ThemeProvider({
   children,
   ...props
 }: React.ComponentProps<typeof NextThemesProvider>) {
-  return <NextThemesProvider {...props}>{children}</NextThemesProvider>
+  // Convert props to plain object if necessary
+  const plainProps = JSON.parse(JSON.stringify(props));
+  return <NextThemesProvider {...plainProps}>{children}</NextThemesProvider>
 }
