@@ -1,17 +1,33 @@
 "use server";
 
-import User from "@/app/database/user.model";
-import connectMongoDB from "@/lib/mongoose";
+import User, { IUser } from "@/app/database/user.model";
+import { connectToDatabase } from "@/lib/mongoose";
 import { TCreateUserParams } from "@/types";
 
-
-export const createUser = async (user: TCreateUserParams) => {
+export async function createUser(params: TCreateUserParams) {
   try {
-    connectMongoDB();
-    const newUser = await User.create(user);
-    return newUser;
+    await connectToDatabase();
+    const user = await User.create(params);
+    return JSON.parse(JSON.stringify(user));
   } catch (error) {
-    console.error("Error creating user:", error);
-    return null;
+
+    throw new Error("Database error: Unable to create user");
   }
-};
+}
+
+export async function getUserInfo({
+  userId,
+}: {
+  userId: string;
+}): Promise<IUser | null | undefined> {
+  try {
+    connectToDatabase();
+    const findUser = await User.findOne({ clerkId: userId });
+
+    if (!findUser?._id) return null;
+
+    return JSON.parse(JSON.stringify(findUser));
+  } catch (error) {
+    console.log(error);
+  }
+}

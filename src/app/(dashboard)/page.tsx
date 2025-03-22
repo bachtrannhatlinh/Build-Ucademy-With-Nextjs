@@ -1,24 +1,19 @@
 import React from 'react'
 import CourseItem from '@/components/course/CourseItem'
 import Heading from '@/components/typography/Heading'
-import { createUser } from '@/lib/actions/user.actions'
+import CourseGrid from '@/components/common/CourseGrid'
+import { getAllCourses } from '@/lib/actions/course.actions'
 
 const page = async() => {
-  const user = await createUser({
-    clerkId: '123',
-    username: 'john_doe1',
-    email_address: 'sieutromkid13251@gmail.com',
-    name: 'John Doe',
-  })
-
+  const courses = await getAllCourses()
   return (
     <div className='p-3'>
       <Heading>Khám phá</Heading>
-      <div className='grid grid-cols-3 gap-8 mt-8'>
-        <CourseItem />
-        <CourseItem />
-        <CourseItem />
-      </div>
+      <CourseGrid>
+        {courses?.map((course) => (
+          <CourseItem key={course.slug} course={course} />
+        ))}
+      </CourseGrid>
     </div>
   )
 }

@@ -1,11 +1,10 @@
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
-import IconStar from "../icons/IconStar";
-import IconClock from "../icons/IconClock";
-import IconEye from "../icons/IconEye";
+import { IconEye, IconStar, IconClock } from "@/components/icons";
+import { ICourse } from "@/app/database/course.model";
 
-const CourseItem = () => {
+const CourseItem = ({ course }: { course: ICourse }) => {
   const courseInfo = [
     {
       title: "3000",
@@ -23,13 +22,15 @@ const CourseItem = () => {
 
   return (
     <div className="bg-white border border-gray-200 p-4 rounded-2xl dark:bg-gray-800 dark:border-gray-700">
-      <Link href="#" className="block h-[180px] relative">
+      <Link href={`/course/${course.slug}`} className="block h-[180px] relative">
         <div className="relative w-full h-full">
           <Image
-            src="https://cdn.pixabay.com/photo/2019/10/11/00/08/sunset-4540772_1280.jpg"
-            alt=""
-            fill
-            className="object-cover rounded"
+            src={course.image || "https://utfs.io/f/c97a7c94-663f-4cf9-b027-7030446b96e7-16.jpg"}
+            alt={course.title || "Course thumbnail"}
+            width={300}
+            height={200}
+            className="w-full h-full object-cover rounded-lg"
+            sizes="@media (max-width: 768px) 100vw,"
             priority
           />
         </div>
@@ -43,21 +44,24 @@ const CourseItem = () => {
 
       <div className="pt-4">
         <h3 className="font-bold text-lg mb-3">
-          Khoá học NextJS Pro - Xây dựng E-learning system hoàn chỉnh
+          {course.title}
         </h3>
         <div className="flex items-center gap-3 mb-5 text-xs text-gray-500">
           {courseInfo.map((item, index) => (
-            <div key={index} className="flex items-center gap-1 dark:text-gray-300">
+            <div
+              key={index}
+              className="flex items-center gap-1 dark:text-gray-300"
+            >
               {item.icon("size-4")}
               <span>{item.title}</span>
             </div>
           ))}
           <span className="font-semibold text-red-400 ml-auto text-base">
-            800.000
+            {course.price.toLocaleString()}đ
           </span>
         </div>
         <Link
-          href="#"
+          href={`/course/${course.slug}`}
           className="flex items-center justify-center w-full mt-10 rounded-lg
          text-white font-semibold bg-red-400 h-12"
         >

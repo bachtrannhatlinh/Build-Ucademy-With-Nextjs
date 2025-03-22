@@ -1,5 +1,3 @@
-'use client'
-
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React from "react";
@@ -14,20 +12,20 @@ const ActiveLink = ({ url, children }: ActiveLinkProps) => {
   const isActive = url === pathname;
 
   return (
-    <>
-      <Link
-        href={url}
-        className={`!p-3 !rounded-md flex items-center gap-3 transition-all svg-animate
-    ${
-      isActive
-        ? "text-white bg-purple-400"
-        : "hover:text-purple-400 hover:bg-purple-400/50 hover:bg-opacity/10 dark:text-white"
-    }
+    <Link
+      href={url}
+      prefetch={true}
+      scroll={false}
+      className={`!p-3 !rounded-md flex items-center gap-3 dark:tex-grayDark text-base transition-all font-medium
+      ${
+        isActive
+          ? "!text-primary bg-primary bg-opacity-10 svg-animate font-semibold"
+          : "hover:!text-primary hover:!bg-primary hover:!bg-opacity-10"
+      }
       `}
-      >
-        {children}
-      </Link>
-    </>
+    >
+      {children}
+    </Link>
   );
 };
 

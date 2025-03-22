@@ -1,11 +1,14 @@
-import React from 'react'
+import { CourseManage } from '@/components/course/CourseManage';
+import { getAllCourses } from '@/lib/actions/course.actions';
 
-const page = () => {
+async function ManageCoursePage() {
+  const courses = await getAllCourses();
+
+  if (!courses) return null;
+  
   return (
-    <div>
-      page course
-    </div>
-  )
+      <CourseManage courses={courses} />
+  );
 }
 
-export default page
+export default ManageCoursePage;
