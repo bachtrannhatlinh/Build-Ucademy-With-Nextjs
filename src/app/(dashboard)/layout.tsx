@@ -39,8 +39,9 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
   }, [isSignedIn, user]);
 
   return (
-    <div className="wrapper block min-h-screen pb-20 lg:grid lg:grid-cols-[300px,minmax(0,1fr)] lg:pb-0">
+    <div className="wrapper grid lg:grid-cols-[300px,minmax(0,1fr)] h-screen">
       <Sidebar />
+      <div></div>
       <main className="p-5 bg-gray-200 dark:bg-black">{children}</main>
     </div>
   );

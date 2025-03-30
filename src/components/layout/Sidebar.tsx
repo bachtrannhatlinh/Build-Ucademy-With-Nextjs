@@ -25,7 +25,7 @@ export default function Sidebar() {
   }
 
   return (
-    <div className="hidden p-5 border-r border-gray-200 bg-white  dark:bg-black lg:flex flex-col">
+    <div className="hidden p-5 border-r border-gray-200 dark:border-opacity-10 bg-white dark:bg-black lg:flex flex-col fixed top-0 left-0 h-screen bottom-0 w-[300px]">
       <a href="/" className="font-bold text-3xl inline-block mb-5">
         Ucademy
       </a>
