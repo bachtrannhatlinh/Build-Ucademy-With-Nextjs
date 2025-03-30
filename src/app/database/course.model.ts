@@ -59,6 +59,11 @@ const courseSchema = new Schema<ICourse>({
     },
   },
   _destroy: { type: Boolean, default: false },
+  level: {
+    type: String,
+    enum: Object.values(CourseLevel),
+    default: CourseLevel.BEGINNER,
+  },
 });
 
 const courseModel = models?.Course || model("Course", courseSchema);

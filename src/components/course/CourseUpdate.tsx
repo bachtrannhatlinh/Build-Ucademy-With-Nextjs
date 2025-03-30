@@ -121,14 +121,15 @@ const UpdateCourseContainer = ({ course }: UpdateCourseContainerProps) => {
         },
       });
 
-      // if (values.slug !== course.slug) {
-      //   router.push(`/manage/course/update?slug=${values.slug}`);
-      // }
+      if (values.slug !== course.slug) {
+        router.push(`/manage/course/update?slug=${values.slug}`);
+      }
+      console.log("Response: ", response);
       if (response?.success) {
         toast.success(response.message);
-        setTimeout(() => {
-          return router.push(`/course/${values.slug}`);
-        }, 1000);
+        // setTimeout(() => {
+        //   return router.push(`/course/${values.slug}`);
+        // }, 1000);
       }
     } catch (error) {
       console.log(error);
@@ -445,7 +446,7 @@ const UpdateCourseContainer = ({ course }: UpdateCourseContainerProps) => {
                   {courseInfo.qa.map((item, index) => (
                     <div key={index} className="grid grid-cols-2 gap-5">
                       <Input
-                        key={index}
+                        key={index + item.question}
                         placeholder={`Câu hỏi số ${index + 1}`}
                         value={item.question}
                         onChange={(event) => {
@@ -455,7 +456,7 @@ const UpdateCourseContainer = ({ course }: UpdateCourseContainerProps) => {
                         }}
                       />
                       <Input
-                        key={index}
+                        key={item.answer + index}
                         placeholder={`Câu trả lời số ${index + 1}`}
                         value={item.answer}
                         onChange={(event) => {

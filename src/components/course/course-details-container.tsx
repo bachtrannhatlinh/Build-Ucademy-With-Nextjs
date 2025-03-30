@@ -45,26 +45,25 @@ export interface CourseDetailsContainerProps {
   courseDetails: ICourse | undefined;
 }
 
-async function CourseDetailsContainer({
+function CourseDetailsContainer({
   courseDetails,
 }: CourseDetailsContainerProps) {
   const router = useRouter();
   const isEmptyData =
-  !courseDetails || courseDetails.status !== CourseStatus.APPROVED;
-  // const isEmptyData = !courseDetails;
+    !courseDetails || courseDetails.status !== CourseStatus.APPROVED;
 
   if (isEmptyData) return <PageNotFound />;
 
   const videoId = courseDetails.intro_url?.split("v=")[1];
 
-  const detailCourseSlug = (slug: string) => { 
+  const detailCourseSlug = (slug: string) => {
     return router.push(`/course/${slug}`);
-  }
+  };
   return (
     <div className="grid lg:grid-cols-[2fr_1fr] gap-10 min-h-screen">
       <div>
         <div className="relative aspect-video mb-5">
-          {courseDetails.intro_url? (
+          {courseDetails.intro_url ? (
             <>
               <iframe
                 width="895"
