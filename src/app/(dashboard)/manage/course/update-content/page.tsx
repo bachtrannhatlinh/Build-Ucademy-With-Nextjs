@@ -1,7 +1,7 @@
 import React from 'react'
 import { fetchCourseBySlug } from '@/lib/actions/course.actions'
 
-export default async function StudyPage({
+export default async function UpdateContentPage({
   searchParams,
 }: {
   searchParams: { slug: string }
@@ -10,11 +10,11 @@ export default async function StudyPage({
 
   return (
     <div>
-      <h1>Study Page</h1>
+      <h1>Update Course Content</h1>
       {course && (
         <div>
           <h2>{course.title}</h2>
-          {/* Add your study content here */}
+          {/* Add your course content update form here */}
         </div>
       )}
     </div>

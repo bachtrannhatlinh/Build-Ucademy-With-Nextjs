@@ -122,7 +122,7 @@ const UpdateCourseContainer = ({ course }: UpdateCourseContainerProps) => {
       });
 
       if (values.slug !== course.slug) {
-        router.push(`/manage/course/update?slug=${values.slug}`);
+        router.replace(`/manage/course/update?slug=${values.slug}`);
       }
       if (response?.success) {
         toast.success(response.message);

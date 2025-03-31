@@ -1,21 +1,14 @@
-import UpdateCoursePage from '@/pages/update-course-page';
-import Heading  from '@/components/typography/Heading';
+import { CourseManage } from '@/components/course/CourseManage';
+import { getAllCourses } from '@/lib/actions/course.actions';
 
-export interface UpdateCoursePageRootProps {
-  searchParams: Promise<{
-    slug: string;
-  }>;
-}
+async function ManageCoursePage() {
+  const courses = await getAllCourses();
 
-async function UpdateCoursePageRoot({ searchParams }: UpdateCoursePageRootProps) {
-  const resolvedParams = await searchParams;
+  if (!courses) return null;
   
   return (
-    <>
-      <Heading>Cập nhật khóa học</Heading>
-      <UpdateCoursePage slug={resolvedParams.slug} />
-    </>
+      <CourseManage courses={courses} />
   );
 }
 
-export default UpdateCoursePageRoot;
+export default ManageCoursePage;

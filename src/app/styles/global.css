@@ -1,4 +1,3 @@
-
 @import "tw-animate-css";
 
 @custom-variant dark (&:is(.dark *));
@@ -187,7 +186,15 @@
   --color-sidebar-ring: var(--sidebar-ring);
 }
 
+@layer utilities {
+  .bgDarkMode {
+    @apply bg-white dark:bg-gray-900;
+  }
 
+  .borderDarkMode {
+    @apply border-gray-200 dark:border-opacity-10;
+  }
+}
 
 @layer base {
   * {

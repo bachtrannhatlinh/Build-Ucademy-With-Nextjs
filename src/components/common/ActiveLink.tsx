@@ -15,11 +15,12 @@ const ActiveLink = ({ url, children }: ActiveLinkProps) => {
     <>
       <Link
         href={url}
-        className={`!p-3 !rounded-md flex items-center gap-3 transition-all svg-animate
+        prefetch={true}
+        className={`!p-3 !rounded-md flex items-center gap-3 dark:tex-grayDark text-base transition-all
     ${
       isActive
-        ? "text-white bg-purple-400"
-        : "hover:text-purple-400 hover:bg-purple-400/50 hover:bg-opacity/10 dark:text-white"
+        ? "!text-primary bg-primary bg-opacity-10 svg-animate font-medium"
+        : "hover:!text-primary hover:!bg-primary hover:!bg-opacity-10"
     }
       `}
       >

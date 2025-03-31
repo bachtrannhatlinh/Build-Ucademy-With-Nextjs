@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useMemo } from "react";
 import { menuItems } from "@/constants";
 import ActiveLink from "@/components/common/ActiveLink";
 import { TMenuItem } from "@/types";
@@ -10,34 +10,40 @@ import { UserButton } from "@clerk/nextjs";
 import {IconUsers} from "@/components/icons";
 import { useAuth } from "@clerk/clerk-react";
 
+const MenuItem = React.memo(({ url = "/", title = "", icon }: TMenuItem) => {
+  return (
+    <li>
+      <ActiveLink url={url}>
+        {icon}
+        {title}
+      </ActiveLink>
+    </li>
+  );
+});
+
+MenuItem.displayName = 'MenuItem';
+
 export default function Sidebar() {
   const { userId } = useAuth();
 
-  function MenuItem({ url = "/", title = "", icon }: TMenuItem) {
-    return (
-      <li>
-        <ActiveLink url={url}>
-          {icon}
-          {title}
-        </ActiveLink>
-      </li>
-    );
-  }
+  const renderedMenuItems = useMemo(() => {
+    return menuItems.map((item, index) => (
+      <MenuItem
+        key={index}
+        url={item.url}
+        title={item.title}
+        icon={item.icon}
+      />
+    ));
+  }, []);
 
   return (
-    <div className="hidden p-5 border-r border-gray-200 dark:border-opacity-10 bg-white dark:bg-black lg:flex flex-col fixed top-0 left-0 h-screen bottom-0 w-[300px]">
+    <div className="hidden p-5 border-r borderDarkMode bgDarkMode lg:flex flex-col fixed top-0 left-0 h-screen bottom-0 w-[300px]">
       <a href="/" className="font-bold text-3xl inline-block mb-5">
         Ucademy
       </a>
       <ul className="flex flex-col gap-2">
-        {menuItems.map((item, index) => (
-          <MenuItem
-            key={index}
-            url={item.url}
-            title={item.title}
-            icon={item.icon}
-          />
-        ))}
+        {renderedMenuItems}
       </ul>
       <div className="mt-auto flex items-center justify-end gap-2">
         <ModeToggle />

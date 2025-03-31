@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { ICourse } from "@/app/database/course.model";
 import PageNotFound from "@/app/not-found";
 import { useRouter } from "next/navigation";
-import { CourseStatus } from "@/constants";
+import { courseLevelTitle, CourseStatus } from "@/constants";
 
 function BoxInfo({
   title,
@@ -98,7 +98,7 @@ function CourseDetailsContainer({
           <div className="grid grid-cols-4 gap-5 mb-10">
             <BoxInfo title="Bài học">{courseDetails.title}</BoxInfo>
             <BoxInfo title="Lượt xem">{courseDetails.views}</BoxInfo>
-            <BoxInfo title="Trình độ">{courseDetails.level}</BoxInfo>
+            <BoxInfo title="Trình độ">{courseLevelTitle[courseDetails.level]}</BoxInfo>
             <BoxInfo title="Thời gian">100h45ph</BoxInfo>
           </div>
         </BoxSection>
