@@ -59,11 +59,13 @@ function CourseDetailsContainer({
   const detailCourseSlug = (slug: string) => {
     return router.push(`/course/${slug}`);
   };
+
+  console.log("courseDetails", courseDetails);
   return (
     <div className="grid lg:grid-cols-[2fr_1fr] gap-10 min-h-screen">
       <div>
         <div className="relative aspect-video mb-5">
-          {courseDetails.intro_url ? (
+          {!courseDetails.image ? (
             <>
               <iframe
                 width="895"
@@ -76,7 +78,7 @@ function CourseDetailsContainer({
             </>
           ) : (
             <Image
-              src="https://cdn.pixabay.com/photo/2019/10/11/00/08/sunset-4540772_1280.jpg"
+              src={courseDetails.image}
               alt=""
               fill
               className="w-full h-full object-cover rounded-lg"
@@ -94,9 +96,9 @@ function CourseDetailsContainer({
 
         <BoxSection title="Thông tin">
           <div className="grid grid-cols-4 gap-5 mb-10">
-            <BoxInfo title="Bài học">100</BoxInfo>
+            <BoxInfo title="Bài học">{courseDetails.title}</BoxInfo>
             <BoxInfo title="Lượt xem">{courseDetails.views}</BoxInfo>
-            <BoxInfo title="Trình độ">Trung bình</BoxInfo>
+            <BoxInfo title="Trình độ">{courseDetails.level}</BoxInfo>
             <BoxInfo title="Thời gian">100h45ph</BoxInfo>
           </div>
         </BoxSection>

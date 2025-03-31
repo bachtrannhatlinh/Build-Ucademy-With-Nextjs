@@ -1,5 +1,7 @@
+import { withUt } from "uploadthing/tw";
 /** @type {import('tailwindcss').Config} */
-module.exports = {
+// Removed 'import type' as it is not valid in JavaScript files
+const config = {
   content: ["./src/**/*.{js,ts,jsx,tsx}"],
   darkMode: "class",
   theme: {
@@ -56,3 +58,5 @@ module.exports = {
   },
   plugins: [require("tailwindcss-animate")],
 };
+
+export default withUt(config);

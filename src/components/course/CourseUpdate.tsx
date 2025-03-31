@@ -124,7 +124,6 @@ const UpdateCourseContainer = ({ course }: UpdateCourseContainerProps) => {
       if (values.slug !== course.slug) {
         router.push(`/manage/course/update?slug=${values.slug}`);
       }
-      console.log("Response: ", response);
       if (response?.success) {
         toast.success(response.message);
         // setTimeout(() => {
@@ -245,7 +244,6 @@ const UpdateCourseContainer = ({ course }: UpdateCourseContainerProps) => {
                       <UploadButton
                         endpoint="imageUploader"
                         onClientUploadComplete={(response) => {
-                          // Do something with the response
                           form.setValue("image", response[0].url);
                         }}
                         onUploadError={(error: Error) => {
@@ -444,9 +442,9 @@ const UpdateCourseContainer = ({ course }: UpdateCourseContainerProps) => {
                 </FormLabel>
                 <FormControl>
                   {courseInfo.qa.map((item, index) => (
-                    <div key={index} className="grid grid-cols-2 gap-5">
+                    <div key={`qa-container-${index}`} className="grid grid-cols-2 gap-5">
                       <Input
-                        key={index + item.question}
+                        key={`question-${index}`}
                         placeholder={`Câu hỏi số ${index + 1}`}
                         value={item.question}
                         onChange={(event) => {
@@ -456,7 +454,7 @@ const UpdateCourseContainer = ({ course }: UpdateCourseContainerProps) => {
                         }}
                       />
                       <Input
-                        key={item.answer + index}
+                        key={`answer-${index}`}
                         placeholder={`Câu trả lời số ${index + 1}`}
                         value={item.answer}
                         onChange={(event) => {
