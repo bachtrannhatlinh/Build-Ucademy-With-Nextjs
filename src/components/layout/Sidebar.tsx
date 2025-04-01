@@ -6,9 +6,8 @@ import ActiveLink from "@/components/common/ActiveLink";
 import { TMenuItem } from "@/types";
 import { ModeToggle } from "../common/ModeToggle";
 import Link from "next/link";
-import { UserButton } from "@clerk/nextjs";
-import {IconUsers} from "@/components/icons";
-import { useAuth } from "@clerk/clerk-react";
+import { UserButton, useAuth } from "@clerk/nextjs";
+import { IconUsers } from "@/components/icons";
 
 const MenuItem = React.memo(({ url = "/", title = "", icon }: TMenuItem) => {
   return (
@@ -48,14 +47,12 @@ export default function Sidebar() {
       <div className="mt-auto flex items-center justify-end gap-2">
         <ModeToggle />
         {!userId ? (
-          <>
-            <Link
-              href="/sign-up"
-              className="size-10 rounded-lg bg-slate-500 text-white flex items-center justify-center p-1"
-            >
-              <IconUsers />
-            </Link>
-          </>
+          <Link
+            href="/sign-up"
+            className="size-10 rounded-lg bg-slate-500 text-white flex items-center justify-center p-1"
+          >
+            <IconUsers />
+          </Link>
         ) : (
           <UserButton />
         )}

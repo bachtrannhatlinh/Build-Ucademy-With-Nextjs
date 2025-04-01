@@ -6,7 +6,14 @@ export default async function StudyPage({
 }: {
   searchParams: { slug: string }
 }) {
-  const course = await fetchCourseBySlug({ slug: searchParams.slug })
+  const params = await searchParams
+  const slug = params?.slug
+
+  if (!slug) {
+    return <div>No course selected</div>
+  }
+
+  const course = await fetchCourseBySlug({ slug })
 
   return (
     <div>

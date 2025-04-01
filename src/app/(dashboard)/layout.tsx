@@ -1,48 +1,22 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { Suspense } from "react";
 import Sidebar from "@/components/layout/Sidebar";
-import { useUser } from "@clerk/nextjs";
+import UserRegistration from "@/components/auth/UserRegistration";
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
-  const { isSignedIn, user } = useUser();
-  const [isRegistered, setIsRegistered] = useState(false);
-
-  useEffect(() => {
-    const checkUserExists = async () => {
-      if (isSignedIn && user) {
-        try {
-          const response = await fetch(`/api/check-user?clerkId=${user.id}`);
-          const data = await response.json();
-          
-          if (data.exists) {
-            setIsRegistered(true);
-          } else {
-            await fetch("/api/register", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({
-                clerkId: user.id,
-                email: user.primaryEmailAddress?.emailAddress,
-                username: user.username,
-              }),
-            });
-            setIsRegistered(true);
-          }
-        } catch (error) {
-          console.error("Error checking user:", error);
-        }
-      }
-    };
-
-    checkUserExists();
-  }, [isSignedIn, user]);
-
   return (
     <div className="wrapper grid lg:grid-cols-[300px,minmax(0,1fr)] h-screen">
-      <Sidebar />
-      <div></div>
-      <main className="p-5 bg-gray-200 dark:bg-black">{children}</main>
+      <Suspense fallback={<div className="hidden lg:block"></div>}>
+        <Sidebar />
+      </Suspense>
+      <div className="hidden lg:block"></div>
+      <main className="p-5 bg-gray-200 dark:bg-black">
+        <Suspense fallback={<div>Loading...</div>}>
+          {children}
+        </Suspense>
+      </main>
+      <UserRegistration />
     </div>
   );
 };

@@ -12,21 +12,20 @@ const ActiveLink = ({ url, children }: ActiveLinkProps) => {
   const isActive = url === pathname;
 
   return (
-    <>
-      <Link
-        href={url}
-        prefetch={true}
-        className={`!p-3 !rounded-md flex items-center gap-3 dark:tex-grayDark text-base transition-all
-    ${
-      isActive
-        ? "!text-primary bg-primary bg-opacity-10 svg-animate font-medium"
-        : "hover:!text-primary hover:!bg-primary hover:!bg-opacity-10"
-    }
+    <Link
+      href={url}
+      prefetch={true}
+      scroll={false}
+      className={`!p-3 !rounded-md flex items-center gap-3 dark:tex-grayDark text-base transition-all
+      ${
+        isActive
+          ? "!text-primary bg-primary bg-opacity-10 svg-animate font-medium"
+          : "hover:!text-primary hover:!bg-primary hover:!bg-opacity-10"
+      }
       `}
-      >
-        {children}
-      </Link>
-    </>
+    >
+      {children}
+    </Link>
   );
 };
 
