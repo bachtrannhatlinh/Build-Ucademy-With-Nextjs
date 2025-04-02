@@ -9,12 +9,12 @@ import Link from "next/link";
 import { UserButton, useAuth } from "@clerk/nextjs";
 import { IconUsers } from "@/components/icons";
 
-const MenuItem = React.memo(({ url = "/", title = "", icon }: TMenuItem) => {
+export const MenuItem = React.memo(({ url = "/", title = "", icon, onlyIcon }: TMenuItem) => {
   return (
     <li>
       <ActiveLink url={url}>
         {icon}
-        {title}
+        {onlyIcon ? null : title}
       </ActiveLink>
     </li>
   );

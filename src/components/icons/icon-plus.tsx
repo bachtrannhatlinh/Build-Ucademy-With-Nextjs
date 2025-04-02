@@ -1,7 +1,7 @@
 const IconPlus = () => {
   return (
     <svg
-      className="size-6"
+      className="size-10"
       fill="none"
       stroke="currentColor"
       strokeWidth={1.5}

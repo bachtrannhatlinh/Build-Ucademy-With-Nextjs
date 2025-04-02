@@ -1,43 +1,49 @@
 "use client";
-import { useUser } from "@clerk/nextjs";
+
+import { useAuth } from "@clerk/nextjs";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useUserContext } from "@/contexts/user-context";
 
 export default function UserRegistration() {
-  const { isSignedIn, user } = useUser();
+  const { userId } = useAuth();
+  const { userInfo, setUserInfo } = useUserContext();
   const queryClient = useQueryClient();
 
   const { data: userExists } = useQuery({
-    queryKey: ["user", user?.id],
+    queryKey: ["user", userId],
     queryFn: async () => {
-      if (!user?.id) return false;
-      const response = await fetch(`/api/check-user?clerkId=${user.id}`);
+      if (!userId) return false;
+      const response = await fetch(`/api/check-user?clerkId=${userId}`);
       const data = await response.json();
       return data.exists;
     },
-    enabled: !!user?.id,
+    enabled: !!userId,
     staleTime: 5 * 60 * 1000, // Cache for 5 minutes
   });
 
   const registerMutation = useMutation({
     mutationFn: async () => {
-      if (!user) return;
+      if (!userId) return;
       return fetch("/api/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          clerkId: user.id,
-          email: user.primaryEmailAddress?.emailAddress,
-          username: user.username,
+          clerkId: userId,
         }),
       });
     },
-    onSuccess: () => {
-      queryClient.setQueryData(["user", user?.id], true);
+    onSuccess: async () => {
+      queryClient.setQueryData(["user", userId], true);
+      // Refresh user info after registration
+      const user = await fetch(`/api/check-user?clerkId=${userId}`).then(res => res.json());
+      if (user) {
+        setUserInfo(user);
+      }
     },
   });
 
   // Register user if they don't exist
-  if (isSignedIn && user && userExists === false) {
+  if (userId && userExists === false) {
     registerMutation.mutate();
   }
 

@@ -12,7 +12,7 @@ import {
 import Heading from "../typography/Heading";
 import { cn } from "@/lib/utils";
 import { commonClassName, CourseStatus, courseStatus } from "@/constants";
-import { IconDelete, IconEdit, IconEye, IconLeftArrow, IconRightArrow, IconStudy } from "../icons";
+import { IconDelete, IconEdit, IconEye, IconLeftArrow, IconPlus, IconRightArrow, IconStudy } from "../icons";
 import Link from "next/link";
 import { ICourse } from "@/app/database/course.model";
 import Swal from "sweetalert2";
@@ -78,6 +78,11 @@ export const CourseManage = ({ courses }: CourseManageProps) => {
 
   return (
     <>
+      <Link 
+        href="/manage/course/new"
+      className="size-16 rounded-full bg-primary flexCenter text-white fixed right-5 bottom-10 animate-bounce">
+        <IconPlus />
+      </Link>
       <div className="flex flex-col lg:flex-row lg:items-center gap-5 justify-between mb-10">
         <Heading>Quản lý khóa học</Heading>
         <div className="w-full lg:w-[300px]">
@@ -111,8 +116,8 @@ export const CourseManage = ({ courses }: CourseManageProps) => {
                       className="flex-shrink-0 size-16 rounded-lg object-cover"
                     />
                     <div className="flex flex-col gap-1">
-                      <h3 className="font-bold text-sm lg:text-base">{course.title}</h3>
-                      <h4 className="text-sm text-slate-500">
+                      <h3 className="font-bold text-sm lg:text-base whitespace-nowrap">{course.title}</h3>
+                      <h4 className="text-sm lg:text-sm text-slate-500">
                         {new Date(course.created_at).toLocaleDateString(
                           "vi-VI"
                         )}

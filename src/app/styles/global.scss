@@ -8,7 +8,7 @@
 
 @layer base {
   body {
-    @apply bg-gray-200;
+    @apply bg-gray-100 antialiased;
   }
   :root {
     --background: 0 0% 100%;
@@ -185,6 +185,10 @@
 }
 
 @layer utilities {
+  .flexCenter {
+    @apply flex items-center justify-center;
+  }
+
   .bgDarkMode {
     @apply bg-white dark:bg-gray-900;
   }

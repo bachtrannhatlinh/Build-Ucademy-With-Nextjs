@@ -9,6 +9,12 @@ import { ICourse } from "@/app/database/course.model";
 import PageNotFound from "@/app/not-found";
 import { useRouter } from "next/navigation";
 import { courseLevelTitle, CourseStatus } from "@/constants";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 
 function BoxInfo({
   title,
@@ -60,7 +66,6 @@ function CourseDetailsContainer({
     return router.push(`/course/${slug}`);
   };
 
-  console.log("courseDetails", courseDetails);
   return (
     <div className="grid lg:grid-cols-[2fr_1fr] gap-10 min-h-screen">
       <div>
@@ -97,8 +102,12 @@ function CourseDetailsContainer({
         <BoxSection title="Thông tin">
           <div className="grid grid-cols-4 gap-5 mb-10">
             <BoxInfo title="Bài học">{courseDetails.title}</BoxInfo>
-            <BoxInfo title="Lượt xem">{courseDetails.views}</BoxInfo>
-            <BoxInfo title="Trình độ">{courseLevelTitle[courseDetails.level]}</BoxInfo>
+            <BoxInfo title="Lượt xem">
+              {new Intl.NumberFormat("en-US").format(courseDetails.views)}
+            </BoxInfo>
+            <BoxInfo title="Trình độ">
+              {courseLevelTitle[courseDetails.level]}
+            </BoxInfo>
             <BoxInfo title="Thời gian">100h45ph</BoxInfo>
           </div>
         </BoxSection>
@@ -128,11 +137,12 @@ function CourseDetailsContainer({
         <BoxSection title="Q.A">
           <div className="loading-normal mb-10">
             {courseDetails.info.qa.map((item, index) => (
-              <div key={index} className="flex items-center gap-2">
-                <span className="text-primary">-</span>
-                <span>{item.question}</span>
-                <span>{item.answer}</span>
-              </div>
+              <Accordion type="single" collapsible key={index}>
+                <AccordionItem value="item-1">
+                  <AccordionTrigger>{item.question}</AccordionTrigger>
+                  <AccordionContent>{item.answer}</AccordionContent>
+                </AccordionItem>
+              </Accordion>
             ))}
           </div>
         </BoxSection>

@@ -16,10 +16,10 @@ const ActiveLink = ({ url, children }: ActiveLinkProps) => {
       href={url}
       prefetch={true}
       scroll={false}
-      className={`!p-3 !rounded-md flex items-center gap-3 dark:tex-grayDark text-base transition-all
+      className={`!p-3 !rounded-md flex items-center gap-3 dark:tex-grayDark text-base transition-all font-medium
       ${
         isActive
-          ? "!text-primary bg-primary bg-opacity-10 svg-animate font-medium"
+          ? "!text-primary bg-primary bg-opacity-10 svg-animate font-semibold"
           : "hover:!text-primary hover:!bg-primary hover:!bg-opacity-10"
       }
       `}
