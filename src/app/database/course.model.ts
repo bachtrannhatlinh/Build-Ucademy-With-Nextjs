@@ -34,7 +34,7 @@ const courseSchema = new Schema<ICourse>({
   intro_url: { type: String, default: "" },
   description: { type: String, default: "" },
   price: { type: Number, default: 0 },
-  sale_price: { type: Number, required: true, default: 0  },
+  sale_price: { type: Number, required: true, default: 0 },
   slug: { type: String },
   status: {
     type: String,
@@ -68,4 +68,3 @@ const courseSchema = new Schema<ICourse>({
 
 const courseModel = models?.Course || model("Course", courseSchema);
 export default courseModel;
-

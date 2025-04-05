@@ -19,5 +19,5 @@ const lectureSchema = new Schema<ILecture>({
   order: { type: Number, default: 0},
 });
 
-const lectureModel = models.Course || model("Lecture", lectureSchema);
+const lectureModel = models?.Lecture || model("Lecture", lectureSchema);
 export default lectureModel;

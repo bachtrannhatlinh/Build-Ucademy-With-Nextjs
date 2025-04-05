@@ -1,22 +1,24 @@
-import React from 'react'
-import { fetchCourseBySlug } from '@/lib/actions/course.actions'
+import React from "react";
+import { fetchCourseBySlug } from "@/lib/actions/course.actions";
+import Heading from "@/components/typography/Heading";
+import CourseUpdateContent from "@/components/course/CourseUpdateContent";
 
-export default async function UpdateContentPage({
-  searchParams,
-}: {
-  searchParams: { slug: string }
-}) {
-  const course = await fetchCourseBySlug({ slug: searchParams.slug })
+const page = async ({ searchParams }: { searchParams: { slug: string } }) => {
+  const course = await fetchCourseBySlug({ slug: searchParams.slug });
+  if (!course) return <div>Không tìm thấy khoá học</div>;
 
   return (
     <div>
-      <h1>Update Course Content</h1>
       {course && (
         <div>
-          <h2>{course.title}</h2>
-          {/* Add your course content update form here */}
+          <Heading>
+            Nội dung: <strong className="text-primary">{course.title}</strong>
+          </Heading>
+          <CourseUpdateContent course={course} />
         </div>
       )}
     </div>
-  )
-}
+  );
+};
+
+export default page;

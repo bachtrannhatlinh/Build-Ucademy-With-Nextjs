@@ -1,8 +1,8 @@
 import CourseDetailsContainer from '@/components/course/course-details-container';
-import { ICourse } from '@/app/database/course.model';
+import { TCourseUpdateParams } from '@/types';
 
 export interface CourseDetailsPageProps {
-  courseDetails: ICourse | undefined;
+  courseDetails: TCourseUpdateParams | undefined;
   userId: string | null;
 }
 

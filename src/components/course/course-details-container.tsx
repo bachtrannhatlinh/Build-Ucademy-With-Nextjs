@@ -3,9 +3,7 @@
 import { IconPlay } from "@/components/icons";
 import Image from "next/image";
 import React from "react";
-
 import { Button } from "@/components/ui/button";
-import { ICourse } from "@/app/database/course.model";
 import PageNotFound from "@/app/not-found";
 import { useRouter } from "next/navigation";
 import { courseLevelTitle, CourseStatus } from "@/constants";
@@ -15,6 +13,8 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { ILecture } from "@/app/database/lecture.model";
+import { TCourseUpdateParams } from "@/types";
 
 function BoxInfo({
   title,
@@ -48,7 +48,7 @@ function BoxSection({
 
 export interface CourseDetailsContainerProps {
   userId?: string | null;
-  courseDetails: ICourse | undefined;
+  courseDetails: TCourseUpdateParams | undefined;
 }
 
 function CourseDetailsContainer({
@@ -57,6 +57,8 @@ function CourseDetailsContainer({
   const router = useRouter();
   const isEmptyData =
     !courseDetails || courseDetails.status !== CourseStatus.APPROVED;
+
+  const lectures = courseDetails?.lectures || [];
 
   if (isEmptyData) return <PageNotFound />;
 
@@ -109,6 +111,19 @@ function CourseDetailsContainer({
               {courseLevelTitle[courseDetails.level]}
             </BoxInfo>
             <BoxInfo title="Thời gian">100h45ph</BoxInfo>
+          </div>
+        </BoxSection>
+
+        <BoxSection title="Nội dung khoá học">
+          <div className="flex flex-col gap-5">
+            {lectures.map((lecture: ILecture) => (
+              <Accordion type="single" collapsible key={lecture._id} className="w-full">
+                <AccordionItem value="item-1">
+                  <AccordionTrigger>{lecture.title}</AccordionTrigger>
+                  <AccordionContent></AccordionContent>
+                </AccordionItem>
+              </Accordion>
+            ))}
           </div>
         </BoxSection>
 
