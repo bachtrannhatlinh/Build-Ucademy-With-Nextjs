@@ -6,7 +6,7 @@ import React from "react";
 import { Button } from "@/components/ui/button";
 import PageNotFound from "@/app/not-found";
 import { useRouter } from "next/navigation";
-import { courseLevelTitle, CourseStatus } from "@/constants";
+import { courseLevelTitle, CourseStatus, CourseLevel } from "@/constants";
 import {
   Accordion,
   AccordionContent,
@@ -108,7 +108,7 @@ function CourseDetailsContainer({
               {new Intl.NumberFormat("en-US").format(courseDetails.views)}
             </BoxInfo>
             <BoxInfo title="Trình độ">
-              {courseLevelTitle[courseDetails.level]}
+              {courseLevelTitle[courseDetails.level as CourseLevel]}
             </BoxInfo>
             <BoxInfo title="Thời gian">100h45ph</BoxInfo>
           </div>
@@ -129,7 +129,7 @@ function CourseDetailsContainer({
 
         <BoxSection title="Yêu cầu">
           <div className="loading-normal mb-10">
-            {courseDetails.info.requirements.map((requirement, index) => (
+            {courseDetails.info.requirements.map((requirement: string, index: number) => (
               <div key={index} className="flex items-center gap-2">
                 <span className="text-primary">-</span>
                 <span>{requirement}</span>
@@ -140,7 +140,7 @@ function CourseDetailsContainer({
 
         <BoxSection title="Lợi ích">
           <div className="loading-normal mb-10">
-            {courseDetails.info.benefits.map((benefit, index) => (
+            {courseDetails.info.benefits.map((benefit: string, index: number) => (
               <div key={index} className="flex items-center gap-2">
                 <span className="text-primary">-</span>
                 <span>{benefit}</span>
@@ -151,7 +151,7 @@ function CourseDetailsContainer({
 
         <BoxSection title="Q.A">
           <div className="loading-normal mb-10">
-            {courseDetails.info.qa.map((item, index) => (
+            {courseDetails.info.qa.map((item: { question: string; answer: string }, index: number) => (
               <Accordion type="single" collapsible key={index}>
                 <AccordionItem value="item-1">
                   <AccordionTrigger>{item.question}</AccordionTrigger>

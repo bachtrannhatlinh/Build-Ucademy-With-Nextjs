@@ -13,14 +13,14 @@ import { Button, Input } from "../ui";
 import { createLecture, updateLecture } from "@/lib/actions/lecture.actions";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
-import { TCourseUpdateContentParams } from "@/types";
+import { TCourseUpdateParams } from "@/types";
 import { ILecture } from "@/app/database/lecture.model";
 import { cn } from "@/lib/utils";
 
 const CourseUpdateContent = ({
   course,
 }: {
-  course: TCourseUpdateContentParams;
+  course: TCourseUpdateParams;
 }) => {
   const lectures = course.lectures || [];
   const [lectureEdit, setLectureEdit] = useState("");
