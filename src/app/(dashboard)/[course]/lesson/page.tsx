@@ -1,8 +1,12 @@
-import { IconLeftArrow, IconRightArrow } from "@/components/icons";
-import { commonClassName } from "@/constants";
 import { fetchCourseBySlug } from "@/lib/actions/course.actions";
-import { getLessonBySlug } from "@/lib/actions/lession.action";
-import { cn } from "@/lib/utils";
+import {
+  getAllLessonByCourse,
+  getLessonBySlug,
+} from "@/lib/actions/lession.action";
+import LessonNavigation from "./LessonNavigation";
+import { convertToPlainObject } from "@/utils/helper";
+
+import Lessontem from "@/components/lesson/Lessontem";
 
 const page = async ({
   params,
@@ -15,15 +19,31 @@ const page = async ({
   const { slug } = await searchParams;
 
   const findCourse = await fetchCourseBySlug({ slug: course });
-  const findLessonBySlug = await getLessonBySlug(
-    findCourse?._id.toString() || "",
-    slug
+  const courseId = findCourse?._id.toString();
+
+  const findLessonBySlug = await getLessonBySlug(courseId || "", slug);
+  const getAllLesson = await getAllLessonByCourse(courseId);
+
+  const prevLessonIndex = getAllLesson.findIndex(
+    (lesson) => lesson.slug === slug
+  );
+  const nextLessonIndex = getAllLesson.findIndex(
+    (lesson) => lesson.slug === slug
   );
 
   if (!findLessonBySlug) return null;
 
   const videoId =
     findLessonBySlug?.video_url?.split("v=").at(-1) || "dQw4w9WgXcQ";
+
+  // Get the previous and next lesson objects
+  const prevLesson = getAllLesson?.[prevLessonIndex - 1];
+  const nextLesson = getAllLesson?.[nextLessonIndex + 1];
+
+  const plainPrevLesson = convertToPlainObject(prevLesson);
+  const plainNextLesson = convertToPlainObject(nextLesson);
+
+  const lectures = findCourse?.lectures || [];
 
   return (
     <div className="grid lg:grid-cols-[2fr_1fr] gap-10 min-h-screen">
@@ -34,16 +54,12 @@ const page = async ({
             src={`https://www.youtube.com/embed/${videoId}`}
           ></iframe>
         </div>
-        <div className="flex justify-start gap-3 mt-5">
-          <button className={cn(commonClassName.paginationButton)}>
-            <IconLeftArrow />
-          </button>
-          <button className={cn(commonClassName.paginationButton)}>
-            <IconRightArrow />
-          </button>
-        </div>
+        <LessonNavigation
+          prevLessonIndex={!plainPrevLesson ? "" : `/${course}/lesson?slug=${plainPrevLesson.slug}`}
+          nextLessonIndex={!plainNextLesson ? "" : `/${course}/lesson?slug=${plainNextLesson.slug}`}
+        />
       </div>
-      <div></div>
+      <Lessontem lectures={lectures} />
     </div>
   );
 };

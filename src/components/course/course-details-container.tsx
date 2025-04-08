@@ -14,6 +14,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { TCourseUpdateParams, TUpdateCourseLecture } from "@/types";
+import Lessontem from "../lesson/Lessontem";
 
 function BoxInfo({
   title,
@@ -113,26 +114,7 @@ function CourseDetailsContainer({
         </BoxSection>
 
         <BoxSection title="Nội dung khoá học">
-          <div className="flex flex-col gap-7">
-            {lectures.map((lecture: TUpdateCourseLecture) => (
-              <Accordion
-                type="single"
-                collapsible
-                key={lecture._id}
-                className="w-full"
-              >
-                <AccordionItem value="item-1">
-                  <AccordionTrigger>{lecture.title}</AccordionTrigger>
-                  {lecture.lessons.map((lesson) => (
-                    <AccordionContent key={lesson._id} className="flex items-center gap-2">
-                      <IconPlay className="size-5" />
-                      <span className="text-medium">{lesson.title}</span>
-                    </AccordionContent>
-                  ))}
-                </AccordionItem>
-              </Accordion>
-            ))}
-          </div>
+          <Lessontem lectures={lectures} />
         </BoxSection>
 
         <BoxSection title="Yêu cầu">

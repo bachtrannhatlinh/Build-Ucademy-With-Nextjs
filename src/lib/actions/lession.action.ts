@@ -42,10 +42,23 @@ export async function getLessonBySlug(course: string, slug: string): Promise<ILe
     if (!lesson) {
       throw new Error("Lesson not found");
     }
-    return lesson;
+    return JSON.parse(JSON.stringify(lesson));
   } catch (error) {
     console.error("Error getting lesson by slug:", error);
     return undefined;
   }
 }
 
+export async function getAllLessonByCourse(course: string): Promise<ILesson[]> {
+  try {
+    connectToDatabase();
+    const lessons = await lessonModel.find({ course });
+    if (!lessons) {
+      throw new Error("Lessons not found");
+    }
+    return lessons;
+  } catch (error) {
+    console.error("Error getting all lessons by course:", error);
+    return [];
+  }
+}

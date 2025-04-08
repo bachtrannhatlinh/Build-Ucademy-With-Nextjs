@@ -14,6 +14,8 @@ export interface ILesson extends Document {
   duration: number;
   video_url: string;
   content: string;
+  prevLessonIndex?: number;
+  nextLessonIndex?: number;
 }
 
 const lessonSchema = new Schema<ILesson>({
