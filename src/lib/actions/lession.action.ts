@@ -4,7 +4,7 @@ import { TCreateLessionParams } from "@/types"
 import { connectToDatabase } from "../mongoose";
 import courseModel from "@/app/database/course.model";
 import lectureModel from "@/app/database/lecture.model";
-import lessonModel from "@/app/database/lesson.model";
+import lessonModel, { ILesson } from "@/app/database/lesson.model";
 import { revalidatePath } from "next/cache";
 
 export async function createLession(params: TCreateLessionParams) {
@@ -34,3 +34,18 @@ export async function createLession(params: TCreateLessionParams) {
     return null;
   }
 }
+
+export async function getLessonBySlug(course: string, slug: string): Promise<ILesson | undefined> {
+  try {
+    connectToDatabase();
+    const lesson = await lessonModel.findOne({ course, slug });
+    if (!lesson) {
+      throw new Error("Lesson not found");
+    }
+    return lesson;
+  } catch (error) {
+    console.error("Error getting lesson by slug:", error);
+    return undefined;
+  }
+}
+

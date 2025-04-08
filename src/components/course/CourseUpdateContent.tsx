@@ -145,7 +145,6 @@ const CourseUpdateContent = ({ course }: { course: TCourseUpdateParams }) => {
 
   const handleDeleteLession = async (
     e: React.MouseEvent<HTMLSpanElement>,
-    courseId: string,
     lessonId: string
   ) => {
     e.stopPropagation();
@@ -160,12 +159,11 @@ const CourseUpdateContent = ({ course }: { course: TCourseUpdateParams }) => {
     }).then(async (result) => {
       if (result.isConfirmed) {
         await updateLesson({
-          course: courseId,
           lessonId,
           updateData: {
             _destroy: true,
-            path: `/manage/course/update-content/?slug=${course.slug}`,
           },
+          path: `/manage/course/update-content/?slug=${course.slug}`,
         });
         toast.success("Xóa khóa học thành công");
       }
@@ -324,7 +322,7 @@ const CourseUpdateContent = ({ course }: { course: TCourseUpdateParams }) => {
                                       "text-red-500"
                                     )}
                                     onClick={(e) => {
-                                      handleDeleteLession(e, course._id ,lesson._id);
+                                      handleDeleteLession(e, lesson._id);
                                     }}
                                   >
                                     <IconDelete />

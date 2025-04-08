@@ -13,7 +13,6 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { ILecture } from "@/app/database/lecture.model";
 import { TCourseUpdateParams, TUpdateCourseLecture } from "@/types";
 
 function BoxInfo({
@@ -72,20 +71,19 @@ function CourseDetailsContainer({
     <div className="grid lg:grid-cols-[2fr_1fr] gap-10 min-h-screen">
       <div>
         <div className="relative aspect-video mb-5">
-          {!courseDetails.image ? (
+          {courseDetails.intro_url ? (
             <>
               <iframe
-                width="895"
-                height="503"
                 src={`https://www.youtube.com/embed/${videoId}`}
-                title="Phao - 2 Phut Hon (KAIZ Remix) | TikTok Vietnamese Music 2020"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                className="w-full b-full object-fill"
+                className="w-full h-full object-fill"
               ></iframe>
             </>
           ) : (
             <Image
-              src={courseDetails.image || "https://utfs.io/f/c97a7c94-663f-4cf9-b027-7030446b96e7-16.jpg"}
+              src={
+                courseDetails.image ||
+                "https://utfs.io/f/c97a7c94-663f-4cf9-b027-7030446b96e7-16.jpg"
+              }
               alt={courseDetails.title || "Course detail"}
               fill
               className="w-full h-full object-cover rounded-lg"
@@ -115,12 +113,22 @@ function CourseDetailsContainer({
         </BoxSection>
 
         <BoxSection title="Nội dung khoá học">
-          <div className="flex flex-col gap-5">
+          <div className="flex flex-col gap-7">
             {lectures.map((lecture: TUpdateCourseLecture) => (
-              <Accordion type="single" collapsible key={lecture._id} className="w-full">
+              <Accordion
+                type="single"
+                collapsible
+                key={lecture._id}
+                className="w-full"
+              >
                 <AccordionItem value="item-1">
                   <AccordionTrigger>{lecture.title}</AccordionTrigger>
-                  <AccordionContent></AccordionContent>
+                  {lecture.lessons.map((lesson) => (
+                    <AccordionContent key={lesson._id} className="flex items-center gap-2">
+                      <IconPlay className="size-5" />
+                      <span className="text-medium">{lesson.title}</span>
+                    </AccordionContent>
+                  ))}
                 </AccordionItem>
               </Accordion>
             ))}
@@ -129,36 +137,42 @@ function CourseDetailsContainer({
 
         <BoxSection title="Yêu cầu">
           <div className="loading-normal mb-10">
-            {courseDetails.info.requirements.map((requirement: string, index: number) => (
-              <div key={index} className="flex items-center gap-2">
-                <span className="text-primary">-</span>
-                <span>{requirement}</span>
-              </div>
-            ))}
+            {courseDetails.info.requirements.map(
+              (requirement: string, index: number) => (
+                <div key={index} className="flex items-center gap-2">
+                  <span className="text-primary">-</span>
+                  <span>{requirement}</span>
+                </div>
+              )
+            )}
           </div>
         </BoxSection>
 
         <BoxSection title="Lợi ích">
           <div className="loading-normal mb-10">
-            {courseDetails.info.benefits.map((benefit: string, index: number) => (
-              <div key={index} className="flex items-center gap-2">
-                <span className="text-primary">-</span>
-                <span>{benefit}</span>
-              </div>
-            ))}
+            {courseDetails.info.benefits.map(
+              (benefit: string, index: number) => (
+                <div key={index} className="flex items-center gap-2">
+                  <span className="text-primary">-</span>
+                  <span>{benefit}</span>
+                </div>
+              )
+            )}
           </div>
         </BoxSection>
 
         <BoxSection title="Q.A">
           <div className="loading-normal mb-10">
-            {courseDetails.info.qa.map((item: { question: string; answer: string }, index: number) => (
-              <Accordion type="single" collapsible key={index}>
-                <AccordionItem value="item-1">
-                  <AccordionTrigger>{item.question}</AccordionTrigger>
-                  <AccordionContent>{item.answer}</AccordionContent>
-                </AccordionItem>
-              </Accordion>
-            ))}
+            {courseDetails.info.qa.map(
+              (item: { question: string; answer: string }, index: number) => (
+                <Accordion type="single" collapsible key={index}>
+                  <AccordionItem value="item-1">
+                    <AccordionTrigger>{item.question}</AccordionTrigger>
+                    <AccordionContent>{item.answer}</AccordionContent>
+                  </AccordionItem>
+                </Accordion>
+              )
+            )}
           </div>
         </BoxSection>
       </div>
