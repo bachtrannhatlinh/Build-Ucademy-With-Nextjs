@@ -94,4 +94,11 @@ export type TUpdateLessonParams = {
   path?: string;
 };
 
+// History
+export type TCreateHistoryParams = {
+  user?: string;
+  course: string;
+  lesson: string;
+};
+
 export type { TActiveLinkProps, TMenuItem, TCreateUserParams, TCreateCourseParams, TUpdateCourseParams };

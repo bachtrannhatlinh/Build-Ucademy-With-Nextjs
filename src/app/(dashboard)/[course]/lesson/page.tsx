@@ -8,6 +8,7 @@ import { convertToPlainObject } from "@/utils/helper";
 
 import Lessontem from "@/components/lesson/Lessontem";
 import Heading from "@/components/typography/Heading";
+import { getHistory } from "@/lib/actions/history.actions";
 
 const page = async ({
   params,
@@ -47,6 +48,12 @@ const page = async ({
 
   const lectures = findCourse?.lectures || [];
 
+  const history = await getHistory({
+    course: courseId,
+  });
+
+  console.log(history, "history");
+
   return (
     <div className="grid lg:grid-cols-[2fr_1fr] gap-10 min-h-screen">
       <div>
@@ -57,8 +64,16 @@ const page = async ({
           ></iframe>
         </div>
         <LessonNavigation
-          prevLessonIndex={!plainPrevLesson ? "" : `/${course}/lesson?slug=${plainPrevLesson.slug}`}
-          nextLessonIndex={!plainNextLesson ? "" : `/${course}/lesson?slug=${plainNextLesson.slug}`}
+          prevLessonIndex={
+            !plainPrevLesson
+              ? ""
+              : `/${course}/lesson?slug=${plainPrevLesson.slug}`
+          }
+          nextLessonIndex={
+            !plainNextLesson
+              ? ""
+              : `/${course}/lesson?slug=${plainNextLesson.slug}`
+          }
         />
         <Heading className="mt-5 mb-10">{findLessonBySlug.title}</Heading>
         <div className="p-5 rounded-lg bgDarkMode border borderDarkMode entry-content">
@@ -69,7 +84,12 @@ const page = async ({
           )}
         </div>
       </div>
-      <Lessontem lectures={lectures} slug={slug}/>
+      <div className="sticky top-5 right-0 max-h-[calc(100vh-100px)] overflow-y-auto">
+        <div className="h-3 w-full rounded-full border borderDarkMode bgDarkMode mb-2">
+          <div className="w-20 h-full rounded-full bg-primary"></div>
+        </div>
+        <Lessontem lectures={lectures} slug={slug} history={history} />
+      </div>
     </div>
   );
 };
