@@ -1,6 +1,5 @@
 "use client";
 
-import { ILesson } from "@/app/database/lesson.model";
 import { IconLeftArrow, IconRightArrow } from "@/components/icons";
 import { commonClassName } from "@/constants";
 import { cn } from "@/lib/utils";

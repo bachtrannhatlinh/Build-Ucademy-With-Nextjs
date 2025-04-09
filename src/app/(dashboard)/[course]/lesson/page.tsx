@@ -7,6 +7,7 @@ import LessonNavigation from "./LessonNavigation";
 import { convertToPlainObject } from "@/utils/helper";
 
 import Lessontem from "@/components/lesson/Lessontem";
+import Heading from "@/components/typography/Heading";
 
 const page = async ({
   params,
@@ -23,11 +24,12 @@ const page = async ({
 
   const findLessonBySlug = await getLessonBySlug(courseId || "", slug);
   const getAllLesson = await getAllLessonByCourse(courseId);
+  const validLessons = getAllLesson.filter((lesson) => !lesson._destroy);
 
-  const prevLessonIndex = getAllLesson.findIndex(
+  const prevLessonIndex = validLessons.findIndex(
     (lesson) => lesson.slug === slug
   );
-  const nextLessonIndex = getAllLesson.findIndex(
+  const nextLessonIndex = validLessons.findIndex(
     (lesson) => lesson.slug === slug
   );
 
@@ -37,8 +39,8 @@ const page = async ({
     findLessonBySlug?.video_url?.split("v=").at(-1) || "dQw4w9WgXcQ";
 
   // Get the previous and next lesson objects
-  const prevLesson = getAllLesson?.[prevLessonIndex - 1];
-  const nextLesson = getAllLesson?.[nextLessonIndex + 1];
+  const prevLesson = validLessons?.[prevLessonIndex - 1];
+  const nextLesson = validLessons?.[nextLessonIndex + 1];
 
   const plainPrevLesson = convertToPlainObject(prevLesson);
   const plainNextLesson = convertToPlainObject(nextLesson);
@@ -58,8 +60,16 @@ const page = async ({
           prevLessonIndex={!plainPrevLesson ? "" : `/${course}/lesson?slug=${plainPrevLesson.slug}`}
           nextLessonIndex={!plainNextLesson ? "" : `/${course}/lesson?slug=${plainNextLesson.slug}`}
         />
+        <Heading className="mt-5 mb-10">{findLessonBySlug.title}</Heading>
+        <div className="p-5 rounded-lg bgDarkMode border borderDarkMode entry-content">
+          {findLessonBySlug.content && (
+            <div
+              dangerouslySetInnerHTML={{ __html: findLessonBySlug.content }}
+            ></div>
+          )}
+        </div>
       </div>
-      <Lessontem lectures={lectures} />
+      <Lessontem lectures={lectures} slug={slug}/>
     </div>
   );
 };

@@ -4,7 +4,6 @@ import Heading from "@/components/typography/Heading";
 import CourseUpdateContent from "@/components/course/CourseUpdateContent";
 
 const Page = async ({ searchParams }: { searchParams: { slug: string } }) => {
-  // In Next.js 14, searchParams itself needs to be awaited
   const params = await searchParams;
   const slug = params?.slug;
   
