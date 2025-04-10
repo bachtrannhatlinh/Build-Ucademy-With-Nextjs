@@ -126,9 +126,6 @@ const UpdateCourseContainer = ({ course }: UpdateCourseContainerProps) => {
       }
       if (response?.success) {
         toast.success(response.message);
-        // setTimeout(() => {
-        //   return router.push(`/course/${values.slug}`);
-        // }, 1000);
       }
     } catch (error) {
       console.log(error);

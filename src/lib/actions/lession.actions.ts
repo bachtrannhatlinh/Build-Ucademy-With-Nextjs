@@ -6,7 +6,6 @@ import Lession from "@/app/database/lesson.model";
 import { revalidatePath } from "next/cache";
 
 export async function updateLesson(params: TUpdateLessonParams) {
-  console.log("params", params);
   try {
     connectToDatabase();
     await Lession.findByIdAndUpdate(params.lessonId, params.updateData, {

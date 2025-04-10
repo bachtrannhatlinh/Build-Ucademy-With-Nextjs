@@ -32,7 +32,6 @@ export async function createHistory(params: TCreateHistoryParams) {
       connectToDatabase();
       const { userId } = await auth();
       const findUser = await User.findOne({ clerkId: userId });
-      console.log(params, 'params')
       if (!findUser) return null;
 
       const deleteHistory = await historyModel.findOneAndDelete({

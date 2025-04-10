@@ -28,7 +28,6 @@ const formSchema = z.object({
 });
 
 const LessonItemUpdate = ({ lesson }: { lesson: ILesson }) => {
-  console.log("lesson", lesson);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -51,7 +50,6 @@ const LessonItemUpdate = ({ lesson }: { lesson: ILesson }) => {
         lessonId: lesson._id,
         updateData: values,
       });
-      console.log("response", response);
       if (response?.success) {
         toast.success(response.message);
       }
