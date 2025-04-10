@@ -114,7 +114,7 @@ function CourseDetailsContainer({
         </BoxSection>
 
         <BoxSection title="Nội dung khoá học">
-          <Lessontem lectures={lectures} slug={courseDetails.slug}/>
+          <Lessontem lectures={lectures} slug={courseDetails.slug} />
         </BoxSection>
 
         <BoxSection title="Yêu cầu">

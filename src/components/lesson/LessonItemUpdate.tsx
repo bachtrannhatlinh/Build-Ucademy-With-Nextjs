@@ -1,3 +1,5 @@
+"use client";
+
 import { ILesson } from "@/app/database/lesson.model";
 import { updateLesson } from "@/lib/actions/lession.actions";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -43,7 +45,6 @@ const LessonItemUpdate = ({ lesson }: { lesson: ILesson }) => {
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log("values", values);
     setIsSubmitting(true);
     try {
       const response = await updateLesson({

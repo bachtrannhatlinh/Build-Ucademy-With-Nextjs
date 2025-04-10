@@ -1,7 +1,7 @@
 "use client";
 
 import { TUpdateCourseLecture } from "@/types";
-import React from "react";
+import React, { useTransition } from "react";
 import {
   Accordion,
   AccordionContent,
@@ -11,7 +11,7 @@ import {
 } from "../ui";
 import { IconPlay } from "../icons";
 import Link from "next/link";
-import { createHistory, deleteHistory } from "@/lib/actions/history.actions";
+import { createHistoryClient } from "@/lib/actions/client-history";
 import { ILesson } from "@/app/database/lesson.model";
 import { IHistory } from "@/app/database/history.model";
 
@@ -19,30 +19,24 @@ const Lessontem = ({
   lectures,
   slug,
   history,
+  url
 }: {
   lectures: TUpdateCourseLecture[];
   slug: string;
-  history: IHistory[] | undefined;
+  history?: IHistory[];
+  url?: string;
 }) => {
+  const [isPending, startTransition] = useTransition();
+
   const handleCheckBox = async (checked: boolean | string, lesson: ILesson) => {
-    if (checked) {
-      try {
-        const res = await createHistory({
-          course: lesson.course.toString(),
-          lesson: lesson._id,
-        });
-      } catch (error) {
-        console.error("Error creating history:", error);
-      }
-    } else {
-      try {
-        const res = await deleteHistory({
-          course: lesson.course.toString(),
-        });
-      } catch (error) {
-        console.error("Error creating history:", error);
-      }
-    }
+    startTransition(() => {
+      createHistoryClient({
+        checked: checked,
+        course: lesson.course.toString(),
+        lesson: lesson._id,
+        path: url,
+      });
+    });
   };
 
   return (

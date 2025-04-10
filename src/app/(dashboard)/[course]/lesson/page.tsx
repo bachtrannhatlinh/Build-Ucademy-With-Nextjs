@@ -51,8 +51,7 @@ const page = async ({
   const history = await getHistory({
     course: courseId,
   });
-
-  console.log(history, "history");
+  const url = `/${course}/lesson?slug=${slug}`;
 
   return (
     <div className="grid lg:grid-cols-[2fr_1fr] gap-10 min-h-screen">
@@ -88,7 +87,12 @@ const page = async ({
         <div className="h-3 w-full rounded-full border borderDarkMode bgDarkMode mb-2">
           <div className="w-20 h-full rounded-full bg-primary"></div>
         </div>
-        <Lessontem lectures={lectures} slug={slug} history={history} />
+        <Lessontem
+          lectures={lectures}
+          slug={slug}
+          history={history}
+          url={url}
+        />
       </div>
     </div>
   );

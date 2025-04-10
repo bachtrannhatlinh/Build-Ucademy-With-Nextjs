@@ -99,6 +99,8 @@ export type TCreateHistoryParams = {
   user?: string;
   course: string;
   lesson: string;
+  checked?: boolean | string;
+  path?: string;
 };
 
 export type { TActiveLinkProps, TMenuItem, TCreateUserParams, TCreateCourseParams, TUpdateCourseParams };
