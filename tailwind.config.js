@@ -3,7 +3,7 @@ import { withUt } from "uploadthing/tw";
 // Removed 'import type' as it is not valid in JavaScript files
 const config = {
   content: ["./src/**/*.{js,ts,jsx,tsx}"],
-  darkMode: ["class", "class"],
+  darkMode: ["class"],
   theme: {
   	extend: {
   		borderRadius: {

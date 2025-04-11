@@ -59,6 +59,10 @@ export async function getHistory(params: {
 }): Promise<IHistory[] | undefined> {
   try {
     connectToDatabase();
+    const { userId } = await auth();
+    const findUser = await User.findOne({ clerkId: userId });
+    if (!findUser) return undefined;
+
     const histories = await historyModel.find({ course: params.course });
     return JSON.parse(JSON.stringify(histories));
   } catch (error) {
