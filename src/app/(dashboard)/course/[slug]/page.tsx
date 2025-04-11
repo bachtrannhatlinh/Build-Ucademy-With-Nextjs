@@ -1,4 +1,4 @@
-import CourseDetailsPage from '@/pages/course-details-page';
+import CourseDetailsPage from '@/app/pages/course-details-page';
 import { getCourseDetailsAndUserId } from '@/lib/course-details-server';
 
 export interface CourseDetailsPageRootProps {

@@ -1,4 +1,4 @@
-import UpdateCoursePage from "@/pages/update-course-page";
+import UpdateCoursePage from "@/app/pages/update-course-page";
 import Heading from "@/components/typography/Heading";
 
 export interface UpdateCoursePageRootProps {

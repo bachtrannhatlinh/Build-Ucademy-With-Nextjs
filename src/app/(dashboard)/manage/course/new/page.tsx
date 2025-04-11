@@ -1,4 +1,4 @@
-import CreateCoursePage from '@/pages/create-course-page';
+import CreateCoursePage from '@/app/pages/create-course-page';
 import Heading  from '@/components/typography/Heading';
 
 export interface CreateCoursePageRootProps {}

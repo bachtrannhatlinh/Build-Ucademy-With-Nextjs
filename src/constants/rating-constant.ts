@@ -1,4 +1,4 @@
-import { BadgeStatusVariant, RatingIcon } from '../types';
+import { BadgeStatusVariant, RatingIcon } from '@/types/common';
 import { RatingStatus } from './enums';
 
 export const ratingList: {

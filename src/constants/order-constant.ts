@@ -1,4 +1,4 @@
-import { BadgeStatusVariant } from '../types';
+import { BadgeStatusVariant } from '@/types/common';
 import { OrderStatus } from './enums';
 
 export const orderStatus: {

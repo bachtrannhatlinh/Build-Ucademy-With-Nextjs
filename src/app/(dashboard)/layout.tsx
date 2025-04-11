@@ -1,5 +1,3 @@
-"use client";
-
 import React, { Suspense } from "react";
 import Sidebar, { MenuItem } from "@/components/layout/Sidebar";
 import UserRegistration from "@/components/auth/UserRegistration";
