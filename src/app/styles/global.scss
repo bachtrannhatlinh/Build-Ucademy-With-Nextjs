@@ -281,3 +281,15 @@
     @apply underline text-primary font-medium;
   }
 }
+
+.animate-bar {
+  animation: animate-width 5s linear 1;
+}
+@keyframes animate-width {
+  from {
+    width: 100%;
+  }
+  to {
+    width: 0;
+  }
+}

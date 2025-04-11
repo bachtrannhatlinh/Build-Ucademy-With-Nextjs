@@ -1,9 +1,12 @@
 import Heading from "@/components/typography/Heading";
 import React from "react";
-import LessonNavigation from "../LessonNavigation";
-import { getAllLessonByCourse, getLessonBySlug } from "@/lib/actions/lession.action";
+import {
+  getAllLessonByCourse,
+  getLessonBySlug,
+} from "@/lib/actions/lession.action";
 import { fetchCourseBySlug } from "@/lib/actions/course.actions";
 import { convertToPlainObject } from "@/utils/helper";
+import VideoPlayer from "./VideoPlayer";
 
 const page = async ({
   params,
@@ -36,29 +39,20 @@ const page = async ({
   const plainPrevLesson = convertToPlainObject(prevLesson);
   const plainNextLesson = convertToPlainObject(nextLesson);
 
+  const linkPrevLesson = `/${course}/lesson?slug=${plainPrevLesson?.slug}`
+  const linkNextLesson = `/${course}/lesson?slug=${plainNextLesson?.slug}`
+
   const videoId =
     findLessonBySlug?.video_url?.split("v=").at(-1) || "dQw4w9WgXcQ";
 
   return (
     <div>
-      <div className="relative mb-5 aspect-video">
-        <iframe
+      {/* <iframe
           className="w-full h-full object-fill"
           src={`https://www.youtube.com/embed/${videoId}`}
-        ></iframe>
-      </div>
-      <LessonNavigation
-        prevLessonIndex={
-          !plainPrevLesson
-            ? ""
-            : `/${course}/lesson?slug=${plainPrevLesson.slug}`
-        }
-        nextLessonIndex={
-          !plainNextLesson
-            ? ""
-            : `/${course}/lesson?slug=${plainNextLesson.slug}`
-        }
-      />
+        ></iframe> */}
+      <VideoPlayer linkPrevLesson={linkPrevLesson} linkNextLesson={linkNextLesson}/>
+
       <Heading className="mt-5 mb-10">{findLessonBySlug.title}</Heading>
       <div className="p-5 rounded-lg bgDarkMode border borderDarkMode entry-content">
         {findLessonBySlug.content && (

@@ -1,5 +1,6 @@
 import React, { Suspense } from "react";
 import LoadingPlayer from "./@player/LoadingPlayer";
+import LessonWrapper from "./LessonWrapper";
 
 const layout = async ({
   player,
@@ -9,10 +10,10 @@ const layout = async ({
   outline: React.ReactNode;
 }) => {
   return (
-    <div className="block lg:grid xl:grid-cols-[minmax(0,2fr),minmax(0,1fr)] gap-10 min-h-screen items-start">
+    <LessonWrapper>
       <Suspense fallback={<LoadingPlayer />}>{player}</Suspense>
       <Suspense>{outline}</Suspense>
-    </div>
+    </LessonWrapper>
   );
 };
 
