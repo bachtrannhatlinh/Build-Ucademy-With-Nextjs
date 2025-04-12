@@ -1,17 +1,35 @@
 "use server";
 
-import { TCourseUpdateParams, TCreateCourseParams, TUpdateCourseParams } from "@/types";
+import {
+  TCourseUpdateParams,
+  TCreateCourseParams,
+  TGetAllCourseParams,
+  TUpdateCourseParams,
+} from "@/types";
 import { connectToDatabase } from "../mongoose";
 import Course, { ICourse } from "@/app/database/course.model";
 import { revalidatePath } from "next/cache";
 import lectureModel from "@/app/database/lecture.model";
 import lessonModel from "@/app/database/lesson.model";
+import { FilterQuery } from "mongoose";
 
 // fetching
-export async function getAllCourses(): Promise<ICourse[] | undefined> {
+export async function getAllCourses(
+  params: TGetAllCourseParams
+): Promise<ICourse[] | undefined> {
   try {
     connectToDatabase();
-    const courses = await Course.find();
+    const { limit = 10, page = 1, search, status } = params;
+    const skip = (page - 1) * limit;
+    const query: FilterQuery<typeof Course> = {};
+    if (search) {
+      query.$or = [{ title: { $regex: search, $options: "i" } }];
+    }
+    const courses = await Course.find(query)
+      .skip(skip)
+      .limit(limit)
+      .sort({ create_at: -1 });
+      
     return JSON.parse(JSON.stringify(courses));
   } catch (error) {
     console.log(error);
@@ -34,9 +52,8 @@ export async function fetchCourseBySlug({
         path: "lessons",
         model: lessonModel,
         match: { _destroy: false },
-      }
-    },
-  );
+      },
+    });
     return JSON.parse(JSON.stringify(findCourse));
   } catch (error) {
     console.log(error);
@@ -51,11 +68,10 @@ export async function createCourses(params: TCreateCourseParams) {
     return {
       success: true,
       data: JSON.parse(JSON.stringify(course)),
-    }
-    
+    };
   } catch (error: any) {
     console.log("Error: ", error);
-    return { success: false, error: error.message};
+    return { success: false, error: error.message };
   }
 }
 

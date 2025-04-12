@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   Table,
   TableBody,
@@ -26,13 +26,66 @@ import { ICourse } from "@/app/database/course.model";
 import Swal from "sweetalert2";
 import { updateCourse } from "@/lib/actions/course.actions";
 import { toast } from "react-toastify";
-import { Input } from "../ui";
+import {
+  Input,
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui";
+import { debounce } from "lodash";
+
+import { usePathname, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 export interface CourseManageProps {
   courses: ICourse[];
 }
 
 export const CourseManage = ({ courses }: CourseManageProps) => {
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  const [page, setPage] = useState<number>(1);
+  useEffect(() => {
+    router.push(`${pathname}?${createQueryString("page", page.toString())}`);
+  }, [page]);
+  const handleChangePage = (type: "prev" | "next") => {
+    if (type === "prev" && page === 1) return;
+    if (type === "prev") {
+      setPage((prev) => prev - 1);
+    }
+
+    if (type === "next") {
+      setPage((prev) => prev + 1);
+    }
+  };
+
+  const createQueryString = useCallback(
+    (name: string, value: string) => {
+      const params = new URLSearchParams(searchParams.toString());
+      params.set(name, value);
+
+      return params.toString();
+    },
+    [searchParams]
+  );
+
+  const handleSelectStatus = (status: CourseStatus) => {
+    router.push(`${pathname}?${createQueryString("status", status)}`);
+  };
+
+  const handleSearchSource = debounce(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const value = e.target.value;
+      router.push(`${pathname}?${createQueryString("search", value)}`);
+    },
+    1000
+  );
+
   const handleDeleteCourse = async (slug: string) => {
     Swal.fire({
       title: "Are you sure?",
@@ -94,8 +147,30 @@ export const CourseManage = ({ courses }: CourseManageProps) => {
       </Link>
       <div className="flex flex-col lg:flex-row lg:items-center gap-5 justify-between mb-10">
         <Heading>Quản lý khóa học</Heading>
-        <div className="w-full lg:w-[300px]">
-          <Input placeholder="Tìm kiếm khoá học..." />
+        <div className="flex">
+          <div className="w-full lg:w-[300px] mr-5">
+            <Input
+              placeholder="Tìm kiếm khoá học..."
+              onChange={(e) => handleSearchSource(e)}
+            />
+          </div>
+
+          <Select
+            onValueChange={(value) => handleSelectStatus(value as CourseStatus)}
+          >
+            <SelectTrigger className="w-[200px]">
+              <SelectValue placeholder="Chọn trạng thái" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                {courseStatus.map((status) => (
+                  <SelectItem key={status.value} value={status.value}>
+                    {status.title}
+                  </SelectItem>
+                ))}
+              </SelectGroup>
+            </SelectContent>
+          </Select>
         </div>
       </div>
 
@@ -192,10 +267,16 @@ export const CourseManage = ({ courses }: CourseManageProps) => {
       </Table>
 
       <div className="flex justify-end gap-3 mt-5">
-        <button className={cn(commonClassName.paginationButton)}>
+        <button
+          className={cn(commonClassName.paginationButton)}
+          onClick={() => handleChangePage("prev")}
+        >
           <IconLeftArrow />
         </button>
-        <button className={cn(commonClassName.paginationButton)}>
+        <button
+          className={cn(commonClassName.paginationButton)}
+          onClick={() => handleChangePage("next")}
+        >
           <IconRightArrow />
         </button>
       </div>

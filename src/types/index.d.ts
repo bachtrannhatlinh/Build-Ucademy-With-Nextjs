@@ -24,6 +24,14 @@ type TCreateUserParams = {
 };
 
 // Course
+export type TGetAllCourseParams = {
+  page: number;
+  limit: number;
+  search?: string;
+  status?: string;
+};
+
+
 export type TCreateCourseParams = {
   title: string;
   slug: string;
