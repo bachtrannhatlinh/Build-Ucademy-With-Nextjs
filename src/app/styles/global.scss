@@ -293,3 +293,25 @@
     width: 0;
   }
 }
+
+
+html body .swal2-container {
+  .swal2-popup {
+    @apply w-full;
+    max-width: 450px;
+  }
+  .swal2-title {
+    @apply font-bold text-xl;
+  }
+  .swal2-actions {
+    .swal2-confirm {
+      @apply bg-primary;
+    }
+    .swal2-cancel {
+      @apply bg-transparent text-gray-900 hover:bg-transparent;
+    }
+    .swal2-confirm {
+      @apply w-[150px];
+    }
+  }
+}

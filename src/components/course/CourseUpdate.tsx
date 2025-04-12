@@ -46,7 +46,7 @@ const formSchema = z.object({
   image: z.string().optional(),
   views: z.number().int().optional(),
   status: z
-    .enum([CourseStatus.APPROVED, CourseStatus.PENDING, CourseStatus.REJECTED])
+    .enum([CourseStatus.APPROVED, CourseStatus.PENDING, CourseStatus.REJECTED, CourseStatus.ALL])
     .optional(),
   level: z
     .enum([
@@ -302,11 +302,13 @@ const UpdateCourseContainer = ({ course }: UpdateCourseContainerProps) => {
                       <SelectValue placeholder="Trạng thái" />
                     </SelectTrigger>
                     <SelectContent>
-                      {courseStatus.map((status) => (
+                      {courseStatus.map((status) => {
+                        if(status.value === CourseStatus.ALL) return null;
+                        return (
                         <SelectItem key={status.value} value={status.value}>
                           {status.title}
                         </SelectItem>
-                      ))}
+                      )})}
                     </SelectContent>
                   </Select>
                 </FormControl>

@@ -121,6 +121,7 @@ export const CourseManage = ({ courses }: CourseManageProps) => {
       confirmButtonText: "Yes, update it!",
     }).then(async (result) => {
       if (result.isConfirmed) {
+        console.log("status", status);
         await updateCourse({
           slug,
           updateData: {

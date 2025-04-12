@@ -5,7 +5,7 @@ import CourseGrid from '@/components/common/CourseGrid'
 import { getAllCourses } from '@/lib/actions/course.actions'
 
 const page = async() => {
-  const courses = await getAllCourses()
+  const courses = await getAllCourses({})
   return (
     <div className='p-3'>
       <Heading>Khám phá</Heading>

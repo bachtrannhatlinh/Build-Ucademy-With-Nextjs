@@ -9,8 +9,8 @@ export default async function ManageCoursePage({
 }) {
   const params = await searchParams;
   const page = Number(params?.page) || 1;
-  const search = params?.search || '';
-  const status = params?.status || CourseStatus.APPROVED;
+  const search = params?.search;
+  const status = params?.status;
 
   const courses = await getAllCourses({
     page,

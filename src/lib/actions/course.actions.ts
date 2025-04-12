@@ -12,6 +12,7 @@ import { revalidatePath } from "next/cache";
 import lectureModel from "@/app/database/lecture.model";
 import lessonModel from "@/app/database/lesson.model";
 import { FilterQuery } from "mongoose";
+import { CourseStatus } from "@/constants";
 
 // fetching
 export async function getAllCourses(
@@ -25,6 +26,11 @@ export async function getAllCourses(
     if (search) {
       query.$or = [{ title: { $regex: search, $options: "i" } }];
     }
+    
+    if (status && status !== CourseStatus.ALL) {
+      query.status = status;
+    }
+    
     const courses = await Course.find(query)
       .skip(skip)
       .limit(limit)
@@ -80,6 +86,7 @@ export async function updateCourse(params: TUpdateCourseParams) {
     connectToDatabase();
     const findCourse = await Course.findOne({ slug: params.slug });
     if (!findCourse) return;
+    console.log("params", params);
     await Course.findOneAndUpdate({ slug: params.slug }, params.updateData, {
       new: true,
     });

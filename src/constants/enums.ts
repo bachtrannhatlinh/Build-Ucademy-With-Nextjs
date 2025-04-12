@@ -2,6 +2,7 @@ export enum CourseStatus {
   APPROVED = 'APPROVED',
   PENDING = 'PENDING',
   REJECTED = 'REJECTED',
+  ALL = 'ALL',
 }
 export enum CourseLevel {
   BEGINNER = 'BEGINNER',

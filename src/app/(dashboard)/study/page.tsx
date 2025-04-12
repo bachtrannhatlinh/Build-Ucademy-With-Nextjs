@@ -1,29 +1,23 @@
 import React from 'react'
-import { fetchCourseBySlug } from '@/lib/actions/course.actions'
+import CourseItem from '@/components/course/CourseItem'
+import Heading from '@/components/typography/Heading'
+import CourseGrid from '@/components/common/CourseGrid'
+import { getAllCourses } from '@/lib/actions/course.actions'
+import { CourseStatus } from '@/constants'
 
-export default async function StudyPage({
-  searchParams,
-}: {
-  searchParams: { slug: string }
-}) {
-  const params = await searchParams
-  const slug = params?.slug
-
-  if (!slug) {
-    return <div>No course selected</div>
-  }
-
-  const course = await fetchCourseBySlug({ slug })
-
+const page = async() => {
+  const courses = await getAllCourses({status: CourseStatus.APPROVED})
   return (
-    <div>
-      <h1>Study Page</h1>
-      {course && (
-        <div>
-          <h2>{course.title}</h2>
-          {/* Add your study content here */}
-        </div>
-      )}
+    <div className='p-3'>
+      <Heading>Study Page</Heading>
+      <CourseGrid>
+        {courses?.map((course) => (
+          <CourseItem key={course.slug} course={course} />
+        ))}
+      </CourseGrid>
     </div>
   )
 }
+
+export default page
+
