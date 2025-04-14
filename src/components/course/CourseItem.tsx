@@ -59,7 +59,7 @@ const CourseItem = ({ course }: { course: ICourse }) => {
             </div>
           ))}
           <span className="font-semibold text-red-400 ml-auto text-base">
-            {course.price.toLocaleString()}đ
+            {course.price.toString()}đ
           </span>
         </div>
         <Link

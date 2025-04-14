@@ -1,7 +1,7 @@
 import Lessontem from "@/components/lesson/Lessontem";
 import { fetchCourseBySlug } from "@/lib/actions/course.actions";
 import { getHistory } from "@/lib/actions/history.actions";
-import { getAllLessonByCourse } from "@/lib/actions/lession.action";
+import { getAllLessonByCourse } from "@/lib/actions/lession.actions";
 import React from "react";
 
 const page = async ({

@@ -1,7 +1,7 @@
 "use server";
 
 import User, { IUser } from "@/app/database/user.model";
-import { CourseStatus } from "@/constants";
+import { UserStatus } from "@/constants";
 import { connectToDatabase } from "@/lib/mongoose";
 import { TCreateUserParams } from "@/types";
 
@@ -26,7 +26,7 @@ export async function getUserInfo({
       path: "courses",
       model: "Course",
       match: {
-        status: CourseStatus.ALL,
+        status: UserStatus.ACTIVE,
       },
     });
 

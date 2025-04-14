@@ -37,9 +37,7 @@ import {
 } from "../ui";
 import { debounce } from "lodash";
 
-import { usePathname, useSearchParams } from "next/navigation";
-import { useRouter } from "next/navigation";
-
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 export interface CourseManageProps {
   courses: ICourse[];
 }

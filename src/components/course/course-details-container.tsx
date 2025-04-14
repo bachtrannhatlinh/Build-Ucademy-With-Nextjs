@@ -15,6 +15,10 @@ import {
 } from "@/components/ui/accordion";
 import { TCourseUpdateParams, TUpdateCourseLecture } from "@/types";
 import Lessontem from "../lesson/Lessontem";
+import { toast } from "react-toastify";
+import { useAuth } from "@clerk/nextjs";
+import { useUserContext } from "@/contexts";
+import { createOrder } from "@/lib/actions/order.actions";
 
 function BoxInfo({
   title,
@@ -55,6 +59,8 @@ function CourseDetailsContainer({
   courseDetails,
 }: CourseDetailsContainerProps) {
   const router = useRouter();
+  const { userInfo } = useUserContext();
+  
   const isEmptyData =
     !courseDetails || courseDetails.status !== CourseStatus.APPROVED;
 
@@ -67,6 +73,35 @@ function CourseDetailsContainer({
   const detailCourseSlug = (slug: string) => {
     return router.push(`/course/${slug}`);
   };
+
+  const createOrderCode = () => `DH-${Date.now().toString().slice(-6)}`;
+    
+  const handleBuyLesson = async () => {
+    console.log(userInfo, "userinfo");
+    if(!userInfo?._id) {
+      toast.error("Bạn cần đăng nhập để mua khoá học này!");
+      return;
+    }
+
+    try {
+      const newOrder = await createOrder({
+        code: createOrderCode(),
+        user: userInfo._id,
+        course: courseDetails._id,
+        total: courseDetails.price,
+        amount: courseDetails.sale_price || courseDetails.price,
+        discount: courseDetails.sale_price ? courseDetails.price - courseDetails.sale_price : 0,
+      });
+      
+      if (newOrder) {
+        toast.success("Đặt hàng thành công!");
+      }
+    } catch (error) {
+      console.error("Error creating order:", error);
+      toast.error("Có lỗi xảy ra khi đặt hàng. Vui lòng thử lại sau!");
+    }
+  }
+
 
   return (
     <div className="grid lg:grid-cols-[2fr_1fr] gap-10 min-h-screen">
@@ -192,7 +227,7 @@ function CourseDetailsContainer({
               <span>Tài liệu kèm theo</span>
             </li>
           </ul>
-          <Button className="bg-primary w-full mb-5">Mua khoá học</Button>
+          <Button className="bg-primary w-full mb-5" onClick={handleBuyLesson}>Mua khoá học</Button>
         </div>
       </div>
     </div>

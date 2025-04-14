@@ -15,7 +15,7 @@ import { toast } from "react-toastify";
 import Swal from "sweetalert2";
 import { TCourseUpdateParams, TUpdateCourseLecture } from "@/types";
 import { cn } from "@/lib/utils";
-import { createLession } from "@/lib/actions/lession.action";
+import { createLession } from "@/lib/actions/lession.actions";
 import { ILesson } from "@/app/database/lesson.model";
 import { updateLesson } from "@/lib/actions/lession.actions";
 import slugify from "slugify";

@@ -3,7 +3,7 @@ import React from "react";
 import {
   getAllLessonByCourse,
   getLessonBySlug,
-} from "@/lib/actions/lession.action";
+} from "@/lib/actions/lession.actions";
 import { fetchCourseBySlug } from "@/lib/actions/course.actions";
 import { convertToPlainObject } from "@/utils/helper";
 import VideoPlayer from "./VideoPlayer";
