@@ -28,7 +28,7 @@ const UserSchema = new Schema<IUser>({
   status: {
     type: String,
     enum: Object.values(UserStatus),
-    default: UserStatus.UNACTIVE,
+    default: UserStatus.ACTIVE,
   },
   role: {
     type: String,

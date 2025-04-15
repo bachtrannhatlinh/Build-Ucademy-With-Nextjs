@@ -1,6 +1,6 @@
+import React from 'react'
 import OrderCoursePage from '@/app/pages/order-course-page'
 import { getAllOrder } from '@/lib/actions/order.actions'
-import React from 'react'
 
 const page = async() => {
   const listOrder = await getAllOrder()

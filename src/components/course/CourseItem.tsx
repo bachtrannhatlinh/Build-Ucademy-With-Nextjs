@@ -63,6 +63,7 @@ const CourseItem = ({ course }: { course: ICourse }) => {
           </span>
         </div>
         <Link
+          // href={`${course.slug}/lesson?slug=${course.slug}`}
           href={`/course/${course.slug}`}
           className="flex items-center justify-center w-full mt-10 rounded-lg
          text-white font-semibold bg-red-400 h-12"

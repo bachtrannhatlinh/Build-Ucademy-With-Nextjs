@@ -4,6 +4,7 @@ import User, { IUser } from "@/app/database/user.model";
 import { UserStatus } from "@/constants";
 import { connectToDatabase } from "@/lib/mongoose";
 import { TCreateUserParams } from "@/types";
+import "@/app/database/course.model";
 
 export async function createUser(params: TCreateUserParams) {
   try {

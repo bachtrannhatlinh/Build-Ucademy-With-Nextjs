@@ -24,6 +24,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { commonClassName, OrderStatus, orderStatus } from "@/constants";
 import { cn } from "@/lib/utils";
 import { IconCheck, IconDelete } from "../icons";
+import { ApproveOrCancalOrder } from "@/lib/actions/order.actions";
 
 const OrderCourseContainer = ({
   listOrder,
@@ -104,7 +105,6 @@ const OrderCourseContainer = ({
             const listStatusItem = orderStatus.find(
               (status) => status.value === order.status
             );
-            console.log("🚀 ~ file: OrderCourseContainer.tsx:78 ~ listStatusItem:", listStatusItem);
             return (
               <TableRow key={order._id}>
                 <TableCell>
@@ -128,8 +128,7 @@ const OrderCourseContainer = ({
                   </span>
                 </TableCell>
                 <TableCell>
-                  <span className="font-sans text-sm lg:text-base">
-                  </span>
+                  <span className="font-sans text-sm lg:text-base"></span>
                 </TableCell>
                 <TableCell>
                   <span
@@ -144,14 +143,18 @@ const OrderCourseContainer = ({
                 <TableCell>
                   <div className="flex gap-3">
                     <button
-                      // href={`/manage/course/update-content?slug=${course.slug}`}
+                      onClick={() =>
+                        ApproveOrCancalOrder({ orderId: order._id, status: OrderStatus.COMPLETED })
+                      }
                       className={cn(commonClassName.action)}
                     >
                       <IconCheck />
                     </button>
-             
+
                     <button
-                      // onClick={() => handleDeleteCourse(course.slug)}
+                      onClick={() =>
+                        ApproveOrCancalOrder({ orderId: order._id, status: OrderStatus.CANCELED })
+                      }
                       className={cn(commonClassName.action)}
                     >
                       <IconDelete />

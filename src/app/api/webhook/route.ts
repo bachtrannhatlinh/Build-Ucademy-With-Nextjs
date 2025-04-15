@@ -57,7 +57,7 @@ export async function POST(req: Request) {
       lastName: userInfo.last_name || '',
       photo: userInfo.image_url,
       name: `${userInfo.first_name || ''} ${userInfo.last_name || ''}`.trim(),
-      status: 'INACTIVE',
+      status: 'ACTIVE',
       role: 'USER',
       create_at: new Date(),
     };

@@ -13,6 +13,11 @@ import lectureModel from "@/app/database/lecture.model";
 import lessonModel from "@/app/database/lesson.model";
 import { FilterQuery } from "mongoose";
 import { CourseStatus } from "@/constants";
+import { CourseItemData } from "@/types/app.type";
+import UserModel from "@/app/database/user.model";
+import CourseModel from "@/app/database/course.model";
+import LectureModel from "@/app/database/lecture.model";
+import LessonModel from "@/app/database/lesson.model";
 
 // fetching
 export async function getAllCourses(
@@ -30,7 +35,7 @@ export async function getAllCourses(
     if (status && status !== CourseStatus.ALL) {
       query.status = status;
     }
-    
+
     const courses = await Course.find(query)
       .skip(skip)
       .limit(limit)
@@ -95,6 +100,40 @@ export async function updateCourse(params: TUpdateCourseParams) {
       success: true,
       message: "Cập nhật khóa học thành công!",
     };
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function fetchCoursesOfUser(
+  userId: string,
+): Promise<CourseItemData[] | undefined> {
+  try {
+    connectToDatabase();
+    const findUser = await UserModel.findOne({ clerkId: userId }).populate({
+      path: 'courses',
+      model: CourseModel,
+      match: {
+        status: CourseStatus.APPROVED,
+      },
+      populate: {
+        path: 'lectures',
+        model: LectureModel,
+        select: 'lessons',
+        populate: {
+          path: 'lessons',
+          model: LessonModel,
+          select: 'slug',
+        },
+      },
+    });
+    console.log(findUser, 'findUser')
+
+    if (!findUser) return;
+    const courses = JSON.parse(JSON.stringify(findUser.courses));
+
+    console.log(courses, 'courses')
+    return courses;
   } catch (error) {
     console.log(error);
   }

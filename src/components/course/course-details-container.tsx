@@ -16,7 +16,6 @@ import {
 import { TCourseUpdateParams, TUpdateCourseLecture } from "@/types";
 import Lessontem from "../lesson/Lessontem";
 import { toast } from "react-toastify";
-import { useAuth } from "@clerk/nextjs";
 import { useUserContext } from "@/contexts";
 import { createOrder } from "@/lib/actions/order.actions";
 
