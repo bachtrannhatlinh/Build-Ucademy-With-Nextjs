@@ -1,4 +1,4 @@
-"use server"
+"use server";
 
 import { CreateOrderParams } from "@/types/order.type";
 import { connectToDatabase } from "../mongoose";
@@ -12,12 +12,12 @@ export async function createOrder(params: CreateOrderParams) {
   try {
     await connectToDatabase();
     const newOrder = await OrderModel.create(params);
-    
+
     // Return the created order
     return JSON.parse(JSON.stringify(newOrder));
   } catch (error) {
     console.error("Error creating order:", error);
-    throw error; 
+    throw error;
   }
 }
 
@@ -33,50 +33,9 @@ export async function getAllOrder() {
     return JSON.parse(JSON.stringify(orders));
   } catch (error) {
     console.error("Error getting order:", error);
-    throw error; 
+    throw error;
   }
 }
-
-// export async function ApproveOrCancalOrder(status: string, id: string) {
-//   try {
-//     await connectToDatabase();
-//     const order = await OrderModel.findById(id);
-//     if (!order) {
-//       throw new Error("Order not found");
-//     }
-//     if(status === OrderStatus.PENDING) {
-//       order.status = OrderStatus.COMPLETED;
-//     }
-//     else if(status === OrderStatus.COMPLETED) {
-//       order.status = OrderStatus.PENDING;
-//     }
-
-//     await order.save();
-    
-//     revalidatePath("/manage/order");
-//     return JSON.parse(JSON.stringify(order));
-//   } catch (error) {
-//     console.error("Error creating order:", error);
-//     throw error; 
-//   }
-// }
-
-// export async function getOrderByStatusApproved() {
-//   const statusComplete = OrderStatus.COMPLETED
-//   try {
-//     await connectToDatabase();
-//     const order = await OrderModel.find()
-//       .populate("course")
-//       .populate("user");
-
-//     const orderApproved = order.filter((item) => item.status === statusComplete);
-
-//     return JSON.parse(JSON.stringify(orderApproved));
-//   } catch (error) {
-//     console.error("Error getting order:", error);
-//     throw error; 
-//   }
-// }
 
 export async function ApproveOrCancalOrder({
   orderId,

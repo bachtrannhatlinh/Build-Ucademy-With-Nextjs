@@ -7,14 +7,16 @@ export interface CourseModelProps extends Document {
   title: string;
   image: string;
   intro_url: string;
-  desc: string;
+  description: string;
   price: number;
   sale_price: number;
   slug: string;
   status: CourseStatus;
+  created_at: Date;
+  author: Schema.Types.ObjectId;
   level: CourseLevel;
   views: number;
-  rating: Schema.Types.ObjectId[];
+  rating: number[];
   info: {
     requirements: string[];
     benefits: string[];
@@ -24,7 +26,5 @@ export interface CourseModelProps extends Document {
     }[];
   };
   lectures: Schema.Types.ObjectId[];
-  created_at: Date;
-  author: Schema.Types.ObjectId;
   _destroy: boolean;
 }

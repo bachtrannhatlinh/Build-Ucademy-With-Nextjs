@@ -141,25 +141,33 @@ const OrderCourseContainer = ({
                   </span>
                 </TableCell>
                 <TableCell>
-                  <div className="flex gap-3">
-                    <button
-                      onClick={() =>
-                        ApproveOrCancalOrder({ orderId: order._id, status: OrderStatus.COMPLETED })
-                      }
-                      className={cn(commonClassName.action)}
-                    >
-                      <IconCheck />
-                    </button>
+                  {order.status === OrderStatus.PENDING ? (
+                    <div className="flex gap-3">
+                      <button
+                        onClick={() =>
+                          ApproveOrCancalOrder({
+                            orderId: order._id,
+                            status: OrderStatus.COMPLETED,
+                          })
+                        }
+                        className={cn(commonClassName.action)}
+                      >
+                        <IconCheck />
+                      </button>
 
-                    <button
-                      onClick={() =>
-                        ApproveOrCancalOrder({ orderId: order._id, status: OrderStatus.CANCELED })
-                      }
-                      className={cn(commonClassName.action)}
-                    >
-                      <IconDelete />
-                    </button>
-                  </div>
+                      <button
+                        onClick={() =>
+                          ApproveOrCancalOrder({
+                            orderId: order._id,
+                            status: OrderStatus.CANCELED,
+                          })
+                        }
+                        className={cn(commonClassName.action)}
+                      >
+                        <IconDelete />
+                      </button>
+                    </div>
+                  ) : null}
                 </TableCell>
               </TableRow>
             );

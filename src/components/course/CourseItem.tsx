@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
+import React, { useMemo } from "react";
 import { IconEye, IconStar, IconClock } from "@/components/icons";
 import { ICourse } from "@/app/database/course.model";
 
@@ -21,10 +21,20 @@ const CourseItem = ({ course }: { course: ICourse }) => {
       icon: (className?: string) => <IconClock className={className} />,
     },
   ];
+  
+  const firstLessonSlug = useMemo(() => {
+    return course?.lectures?.[0]?.lessons?.[0]?.slug || "";
+  }, [course]);
+
+  const courseUrl = useMemo(() => {
+    return firstLessonSlug 
+      ? `${course.slug}/lesson?slug=${firstLessonSlug}`
+      : `/course/${course.slug}`;
+  }, [course.slug, firstLessonSlug]);
 
   return (
     <div className="bg-white border border-gray-200 p-4 rounded-2xl dark:bg-gray-800 dark:border-gray-700">
-      <Link href={`/course/${course.slug}`} className="block h-[180px] relative">
+      <Link href={courseUrl} className="block h-[180px] relative">
         <div className="relative w-full h-full">
           <Image
             src={course.image || "https://utfs.io/f/c97a7c94-663f-4cf9-b027-7030446b96e7-16.jpg"}
@@ -63,8 +73,7 @@ const CourseItem = ({ course }: { course: ICourse }) => {
           </span>
         </div>
         <Link
-          // href={`${course.slug}/lesson?slug=${course.slug}`}
-          href={`/course/${course.slug}`}
+          href={courseUrl}
           className="flex items-center justify-center w-full mt-10 rounded-lg
          text-white font-semibold bg-red-400 h-12"
         >

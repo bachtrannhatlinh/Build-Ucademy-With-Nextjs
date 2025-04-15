@@ -110,6 +110,28 @@ export async function fetchCoursesOfUser(
 ): Promise<CourseItemData[] | undefined> {
   try {
     connectToDatabase();
+    
+    const rawUser = await UserModel.findOne({ clerkId: userId });
+    
+    const userCourses = await CourseModel.find({ 
+      author: rawUser?._id,
+      status: CourseStatus.APPROVED 
+    });
+
+    if (userCourses.length > 0 && rawUser) {
+      await UserModel.findByIdAndUpdate(
+        rawUser._id,
+        { 
+          $addToSet: { 
+            courses: { 
+              $each: userCourses.map(course => course._id) 
+            } 
+          } 
+        },
+        { new: true }
+      );
+    }
+    
     const findUser = await UserModel.findOne({ clerkId: userId }).populate({
       path: 'courses',
       model: CourseModel,
@@ -127,14 +149,14 @@ export async function fetchCoursesOfUser(
         },
       },
     });
-    console.log(findUser, 'findUser')
-
-    if (!findUser) return;
+    
+    if (!findUser) {
+      return;
+    }
+    
     const courses = JSON.parse(JSON.stringify(findUser.courses));
-
-    console.log(courses, 'courses')
     return courses;
   } catch (error) {
-    console.log(error);
+    console.error('Error in fetchCoursesOfUser:', error);
   }
 }
