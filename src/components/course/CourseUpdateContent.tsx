@@ -131,7 +131,7 @@ const CourseUpdateContent = ({ course }: { course: TCourseUpdateParams }) => {
           }),
         },
         path: `/manage/course/update-content/?slug=${course.slug}`,
-      })
+      });
       if (res?.success) {
         toast.success("Update khoá học thành công");
         setlessonEdit("");
@@ -141,7 +141,7 @@ const CourseUpdateContent = ({ course }: { course: TCourseUpdateParams }) => {
       console.error("Error updating lecture:", error);
       toast.error("Có lỗi xảy ra khi cập nhật bài giảng");
     }
-  }
+  };
 
   const handleDeleteLession = async (
     e: React.MouseEvent<HTMLSpanElement>,
@@ -168,7 +168,7 @@ const CourseUpdateContent = ({ course }: { course: TCourseUpdateParams }) => {
         toast.success("Xóa khóa học thành công");
       }
     });
-  }
+  };
 
   return (
     <div>
@@ -189,7 +189,7 @@ const CourseUpdateContent = ({ course }: { course: TCourseUpdateParams }) => {
                         <div className="w-full">
                           <Input
                             placeholder="Tên chương"
-                            defaultValue={lecture.title}
+                            value={lectureEdit}
                             onChange={(e) => {
                               setLectureEdit(e.target.value);
                             }}
@@ -266,7 +266,7 @@ const CourseUpdateContent = ({ course }: { course: TCourseUpdateParams }) => {
                                 <div className="w-full">
                                   <Input
                                     placeholder="Tên chương"
-                                    defaultValue={lesson.title}
+                                    value={lessonEdit}
                                     onChange={(e) => {
                                       setlessonEdit(e.target.value);
                                     }}
@@ -333,9 +333,7 @@ const CourseUpdateContent = ({ course }: { course: TCourseUpdateParams }) => {
                           </div>
                         </AccordionTrigger>
                         <AccordionContent>
-                          <LessonItemUpdate 
-                            lesson={lesson}
-                          />
+                          <LessonItemUpdate lesson={lesson} />
                         </AccordionContent>
                       </AccordionItem>
                     </Accordion>

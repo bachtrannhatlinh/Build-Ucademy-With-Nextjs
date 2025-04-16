@@ -3,11 +3,17 @@
 import { useAuth } from "@clerk/nextjs";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useUserContext } from "@/contexts/user-context";
+import { useEffect, useState } from "react";
 
 export default function UserRegistration() {
   const { userId } = useAuth();
   const { userInfo, setUserInfo } = useUserContext();
   const queryClient = useQueryClient();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const { data: userExists } = useQuery({
     queryKey: ["user", userId],
@@ -17,7 +23,7 @@ export default function UserRegistration() {
       const data = await response.json();
       return data.exists;
     },
-    enabled: !!userId,
+    enabled: !!userId && mounted,
     staleTime: 5 * 60 * 1000, // Cache for 5 minutes
   });
 
@@ -42,10 +48,11 @@ export default function UserRegistration() {
     },
   });
 
-  // Register user if they don't exist
-  if (userId && userExists === false) {
-    registerMutation.mutate();
-  }
+  useEffect(() => {
+    if (mounted && userId && userExists === false) {
+      registerMutation.mutate();
+    }
+  }, [mounted, userId, userExists, registerMutation]);
 
   return null;
 } 

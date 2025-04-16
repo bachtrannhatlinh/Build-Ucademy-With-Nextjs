@@ -18,6 +18,7 @@ import Lessontem from "../lesson/Lessontem";
 import { toast } from "react-toastify";
 import { useUserContext } from "@/contexts";
 import { createOrder } from "@/lib/actions/order.actions";
+import BuyCourse from "./BuyCourse";
 
 function BoxInfo({
   title,
@@ -59,7 +60,7 @@ function CourseDetailsContainer({
 }: CourseDetailsContainerProps) {
   const router = useRouter();
   const { userInfo } = useUserContext();
-  
+
   const isEmptyData =
     !courseDetails || courseDetails.status !== CourseStatus.APPROVED;
 
@@ -74,10 +75,10 @@ function CourseDetailsContainer({
   };
 
   const createOrderCode = () => `DH-${Date.now().toString().slice(-6)}`;
-    
+
   const handleBuyLesson = async () => {
     console.log(userInfo, "userinfo");
-    if(!userInfo?._id) {
+    if (!userInfo?._id) {
       toast.error("Bạn cần đăng nhập để mua khoá học này!");
       return;
     }
@@ -89,9 +90,11 @@ function CourseDetailsContainer({
         course: courseDetails._id,
         total: courseDetails.price,
         amount: courseDetails.sale_price || courseDetails.price,
-        discount: courseDetails.sale_price ? courseDetails.price - courseDetails.sale_price : 0,
+        discount: courseDetails.sale_price
+          ? courseDetails.price - courseDetails.sale_price
+          : 0,
       });
-      
+
       if (newOrder) {
         toast.success("Đặt hàng thành công!");
       }
@@ -99,8 +102,7 @@ function CourseDetailsContainer({
       console.error("Error creating order:", error);
       toast.error("Có lỗi xảy ra khi đặt hàng. Vui lòng thử lại sau!");
     }
-  }
-
+  };
 
   return (
     <div className="grid lg:grid-cols-[2fr_1fr] gap-10 min-h-screen">
@@ -193,41 +195,10 @@ function CourseDetailsContainer({
         </BoxSection>
       </div>
       <div>
-        <div className="bg-white p-5 rounded-lg">
-          <div className="flex items-center gap-2 mb-3">
-            <strong className="text-primary text-xl font-bold">
-              {courseDetails.price}
-            </strong>
-            <span className="text-slate-400 line-through text-sm">
-              {courseDetails.sale_price}
-            </span>
-            <span className="ml-auto inline-block px-3 py-1 rounded-lg bg-primary text-primary bg-opacity-10 font-semibold text-sm">
-              {Math.floor(
-                (courseDetails.price / courseDetails.sale_price) * 100
-              )}
-            </span>
-          </div>
-          <h3 className="font-bold mb-3 text-sm">Khoá học gồm có:</h3>
-          <ul className="mb-5 flex flex-col gap-2 text-sm text-slate-500">
-            <li className="flex items-center gap-2">
-              <IconPlay className="size-4" />
-              <span>30h học</span>
-            </li>
-            <li className="flex items-center gap-2">
-              <IconPlay className="size-4" />
-              <span>Video full HD</span>
-            </li>
-            <li className="flex items-center gap-2">
-              <IconPlay className="size-4" />
-              <span>Có nhóm hỗ trợ</span>
-            </li>
-            <li className="flex items-center gap-2">
-              <IconPlay className="size-4" />
-              <span>Tài liệu kèm theo</span>
-            </li>
-          </ul>
-          <Button className="bg-primary w-full mb-5" onClick={handleBuyLesson}>Mua khoá học</Button>
-        </div>
+        <BuyCourse
+          courseDetails={courseDetails}
+          onBuyLesson={handleBuyLesson}
+        />
       </div>
     </div>
   );

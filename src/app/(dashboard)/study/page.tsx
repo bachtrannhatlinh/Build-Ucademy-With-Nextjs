@@ -17,7 +17,6 @@ const page = async() => {
   }
 
   const courses = await fetchCoursesOfUser(userId) || [];
-  console.log('Fetched courses count:', courses.length);
   
   return (
     <div className='p-3'>
