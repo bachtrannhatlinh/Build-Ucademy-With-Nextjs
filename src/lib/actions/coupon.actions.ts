@@ -2,6 +2,7 @@
 
 import Coupon, { ICoupon } from "@/app/database/coupon.model";
 import { connectToDatabase } from "../mongoose";
+import { revalidatePath } from "next/cache";
 
 export async function createCoupon(params: any) {
   try {
@@ -43,6 +44,16 @@ export async function getCouponByCode(code: string): Promise<ICoupon | undefined
     return JSON.parse(JSON.stringify(coupon));
   }
   catch (error) {
+    console.log(error);
+  }
+}
+
+export async function deleteCoupon(code: string) {
+  try {
+    connectToDatabase();
+    await Coupon.findOneAndDelete({ code });
+    revalidatePath("/manage/coupon");
+  } catch (error) {
     console.log(error);
   }
 }

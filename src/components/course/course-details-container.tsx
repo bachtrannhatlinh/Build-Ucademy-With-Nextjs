@@ -77,7 +77,6 @@ function CourseDetailsContainer({
   const createOrderCode = () => `DH-${Date.now().toString().slice(-6)}`;
 
   const handleBuyLesson = async () => {
-    console.log(userInfo, "userinfo");
     if (!userInfo?._id) {
       toast.error("Bạn cần đăng nhập để mua khoá học này!");
       return;

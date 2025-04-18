@@ -38,6 +38,7 @@ import {
 import { debounce } from "lodash";
 
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import BouncedLink from "../common/BouncedLink";
 export interface CourseManageProps {
   courses: ICourse[];
 }
@@ -138,12 +139,7 @@ export const CourseManage = ({ courses }: CourseManageProps) => {
 
   return (
     <>
-      <Link
-        href="/manage/course/new"
-        className="size-16 rounded-full bg-primary flexCenter text-white fixed right-5 bottom-10 animate-bounce"
-      >
-        <IconPlus />
-      </Link>
+      <BouncedLink url={"/manage/course/new"}/>
       <div className="flex flex-col lg:flex-row lg:items-center gap-5 justify-between mb-10">
         <Heading>Quản lý khóa học</Heading>
         <div className="flex">

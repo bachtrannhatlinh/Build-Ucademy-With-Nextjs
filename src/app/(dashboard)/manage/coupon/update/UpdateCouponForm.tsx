@@ -23,10 +23,9 @@ import {
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Switch } from "@/components/ui/switch";
 import { CouponType, couponTypes } from "@/constants";
-import { createCoupon, updateCoupon } from "@/lib/actions/coupon.actions";
+import { updateCoupon } from "@/lib/actions/coupon.actions";
 import { CalendarIcon } from "@radix-ui/react-icons";
 import { format } from "date-fns";
-import { redirect } from "next/navigation";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import { ICoupon } from "@/app/database/coupon.model";
@@ -44,7 +43,7 @@ const formSchema = z.object({
       message: "Mã giảm giá không được để trống",
     })
     .min(3, "Mã giảm giá phải có ít nhất 3 ký tự")
-    .max(10, "Mã giảm giá không được quá 10 ký tự"),
+    .max(20, "Mã giảm giá không được quá 20 ký tự"),
   startDate: z.string().optional(),
   endDate: z.string().optional(),
   active: z.boolean().optional(),
@@ -54,6 +53,7 @@ const formSchema = z.object({
   limit: z.number().optional(),
 });
 const NewCouponForm = ({ coupon }: { coupon: ICoupon | undefined }) => {
+  console.log(coupon, 'coupon');
   const [startDate, setStartDate] = useState<Date | undefined>(
     coupon?.start_date ? new Date(coupon.start_date) : undefined
   );
@@ -319,7 +319,10 @@ const NewCouponForm = ({ coupon }: { coupon: ICoupon | undefined }) => {
               <FormItem>
                 <FormLabel>Khóa học</FormLabel>
                 <FormControl>
-                  <Input placeholder="Tìm kiếm khóa học..." />
+                  <Input
+                    placeholder="Tìm kiếm khóa học..."
+                    onChange={(e) => handleFindCourse(e)}
+                  />
                   {findCourse && findCourse.length > 0 && (
                     <div className="flex flex-col gap-2 !mt-5">
                       {findCourse?.map((course) => (

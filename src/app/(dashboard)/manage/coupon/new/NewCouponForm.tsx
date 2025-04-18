@@ -32,17 +32,19 @@ import { debounce } from "lodash";
 import { getAllCourses } from "@/lib/actions/course.actions";
 import { ICourse } from "@/app/database/course.model";
 import { IconClose } from "@/components/icons";
-import { Checkbox } from "@/components/ui";
+import { Checkbox, InputFormatCurrency } from "@/components/ui";
 const formSchema = z.object({
-  title: z.string({
-    message: "Tiêu đề không được để trống",
-  }),
+  title: z
+    .string({
+      message: "Tiêu đề không được để trống",
+    })
+    .min(10, "Tiêu đề phải có ít nhất 10 ký tự"),
   code: z
     .string({
       message: "Mã giảm giá không được để trống",
     })
     .min(3, "Mã giảm giá phải có ít nhất 3 ký tự")
-    .max(10, "Mã giảm giá không được quá 10 ký tự"),
+    .max(20, "Mã giảm giá không được quá 20 ký tự"),
   startDate: z.string().optional(),
   endDate: z.string().optional(),
   active: z.boolean().optional(),
@@ -80,6 +82,16 @@ const NewCouponForm = () => {
       courses: selectedCourses.map((course) => course._id),
     };
     try {
+      const couponType = values.type;
+      if (
+        couponType === CouponType.PERCENT &&
+        values?.value &&
+        (values?.value > 100 || values?.value < 0)
+      ) {
+        form.setError("value", {
+          message: "Giá trị không hợp lệ",
+        });
+      }
       const newCoupon = await createCoupon(valuesToSend);
       if (newCoupon.code) {
         toast.success("Tạo mã giảm giá thành công");
@@ -117,7 +129,7 @@ const NewCouponForm = () => {
         prev.filter((item) => item._id !== course._id)
       );
     }
-  }
+  };
 
   return (
     <Form {...form}>
@@ -225,7 +237,7 @@ const NewCouponForm = () => {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Loại coupon</FormLabel>
-                <FormControl>
+                <FormControl className="h-12">
                   <RadioGroup
                     defaultValue={CouponType.PERCENT}
                     className="flex gap-5"
@@ -252,14 +264,21 @@ const NewCouponForm = () => {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Giá trị</FormLabel>
-                <FormControl>
-                  <Input
-                    type="number"
-                    placeholder="50%"
-                    {...field}
-                    onChange={(e) => field.onChange(e.target.valueAsNumber)}
-                  />
-                </FormControl>
+                <>
+                  {couponTypeWatch === CouponType.PERCENT ? (
+                    <Input
+                      type="number"
+                      placeholder="100"
+                      {...field}
+                      onChange={(e) => field.onChange(e.target.valueAsNumber)}
+                    />
+                  ) : (
+                    <InputFormatCurrency
+                      {...field}
+                      onChange={(e) => field.onChange(parseInt(e.target.value))}
+                    />
+                  )}
+                </>
                 <FormMessage />
               </FormItem>
             )}
@@ -270,8 +289,8 @@ const NewCouponForm = () => {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Trạng thái</FormLabel>
-                <FormControl>
-                  <div>
+                <FormControl className="h-12">
+                  <div className="flex flex-col justify-center">
                     <Switch
                       checked={field.value}
                       onCheckedChange={field.onChange}

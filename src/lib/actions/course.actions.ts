@@ -25,14 +25,14 @@ export async function getAllCourses(
 ): Promise<ICourse[] | undefined> {
   try {
     connectToDatabase();
-    const { limit = 10, page = 1, search } = params;
+    const { limit = 10, page = 1, search, status } = params;
     const skip = (page - 1) * limit;
     const query: FilterQuery<typeof Course> = {};
     if (search) {
       query.$or = [{ title: { $regex: search, $options: "i" } }];
     }
     
-    query.status = CourseStatus.APPROVED;
+    query.status = status || CourseStatus.APPROVED;
 
     const courses = await Course.find(query)
       .skip(skip)
@@ -89,7 +89,6 @@ export async function updateCourse(params: TUpdateCourseParams) {
     connectToDatabase();
     const findCourse = await Course.findOne({ slug: params.slug });
     if (!findCourse) return;
-    console.log("params", params);
     await Course.findOneAndUpdate({ slug: params.slug }, params.updateData, {
       new: true,
     });
@@ -108,27 +107,6 @@ export async function fetchCoursesOfUser(
 ): Promise<CourseItemData[] | undefined> {
   try {
     connectToDatabase();
-    
-    const rawUser = await UserModel.findOne({ clerkId: userId });
-    
-    const userCourses = await CourseModel.find({ 
-      author: rawUser?._id,
-      status: CourseStatus.APPROVED 
-    });
-
-    if (userCourses.length > 0 && rawUser) {
-      await UserModel.findByIdAndUpdate(
-        rawUser._id,
-        { 
-          $addToSet: { 
-            courses: { 
-              $each: userCourses.map(course => course._id) 
-            } 
-          } 
-        },
-        { new: true }
-      );
-    }
     
     const findUser = await UserModel.findOne({ clerkId: userId }).populate({
       path: 'courses',

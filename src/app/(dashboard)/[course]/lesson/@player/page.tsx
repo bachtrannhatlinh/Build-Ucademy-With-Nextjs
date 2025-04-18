@@ -21,6 +21,7 @@ const page = async ({
   const findCourse = await fetchCourseBySlug({ slug: course });
   const courseId = findCourse?._id.toString();
   const findLessonBySlug = await getLessonBySlug(courseId || "", slug);
+
   if (!findLessonBySlug) return null;
 
   const getAllLesson = await getAllLessonByCourse(courseId);
@@ -42,15 +43,8 @@ const page = async ({
   const linkPrevLesson = `/${course}/lesson?slug=${plainPrevLesson?.slug}`
   const linkNextLesson = `/${course}/lesson?slug=${plainNextLesson?.slug}`
 
-  const videoId =
-    findLessonBySlug?.video_url?.split("v=").at(-1) || "dQw4w9WgXcQ";
-
   return (
     <div>
-      {/* <iframe
-          className="w-full h-full object-fill"
-          src={`https://www.youtube.com/embed/${videoId}`}
-        ></iframe> */}
       <VideoPlayer linkPrevLesson={linkPrevLesson} linkNextLesson={linkNextLesson}/>
 
       <Heading className="mt-5 mb-10">{findLessonBySlug.title}</Heading>

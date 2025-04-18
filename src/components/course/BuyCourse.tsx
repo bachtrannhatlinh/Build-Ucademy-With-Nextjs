@@ -11,7 +11,6 @@ const BuyCourse = ({
   courseDetails: TCourseUpdateParams;
   onBuyLesson: () => Promise<void>;
 }) => {
-  console.log(courseDetails.lectures.length);
   if (courseDetails.lectures.length > 0) {
     return (
       <div className="bgDarkMode borderDarkMode rounded-lg border p-5">
