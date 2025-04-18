@@ -30,6 +30,11 @@ import { redirect } from "next/navigation";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import { ICoupon } from "@/app/database/coupon.model";
+import { ICourse } from "@/app/database/course.model";
+import { debounce } from "lodash";
+import { getAllCourses } from "@/lib/actions/course.actions";
+import { IconClose } from "@/components/icons";
+import { Checkbox } from "@/components/ui";
 const formSchema = z.object({
   title: z.string({
     message: "Tiêu đề không được để trống",
@@ -48,17 +53,26 @@ const formSchema = z.object({
   courses: z.array(z.string()).optional(),
   limit: z.number().optional(),
 });
-const NewCouponForm = ({coupon}: {coupon: ICoupon | undefined}) => {
-  console.log(coupon, 'coupon');
-  const [startDate, setStartDate] = useState<Date | undefined>(coupon?.start_date ? new Date(coupon.start_date) : undefined);
-  const [endDate, setEndDate] = useState<Date | undefined>(coupon?.end_date ? new Date(coupon.end_date) : undefined);
+const NewCouponForm = ({ coupon }: { coupon: ICoupon | undefined }) => {
+  const [startDate, setStartDate] = useState<Date | undefined>(
+    coupon?.start_date ? new Date(coupon.start_date) : undefined
+  );
+  const [endDate, setEndDate] = useState<Date | undefined>(
+    coupon?.end_date ? new Date(coupon.end_date) : undefined
+  );
+  const [findCourse, setFindCourse] = useState<ICourse[] | undefined>([]);
+  const [selectedCourses, setSelectedCourses] = useState<ICourse[]>([]);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       title: coupon?.title || "",
       code: coupon?.code || "",
-      startDate: coupon?.start_date ? new Date(coupon.start_date).toISOString() : undefined,
-      endDate: coupon?.end_date ? new Date(coupon.end_date).toISOString() : undefined,
+      startDate: coupon?.start_date
+        ? new Date(coupon.start_date).toISOString()
+        : undefined,
+      endDate: coupon?.end_date
+        ? new Date(coupon.end_date).toISOString()
+        : undefined,
       active: coupon?.active || false,
       value: coupon?.value || 0,
       type: coupon?.type || CouponType.PERCENT,
@@ -81,14 +95,39 @@ const NewCouponForm = ({coupon}: {coupon: ICoupon | undefined}) => {
       const resp = await updateCoupon(coupon?._id || "", valuesToSend);
       if (resp) {
         toast.success("Cập nhật mã giảm giá thành công");
-        redirect("/manage/coupon");
+        setStartDate(undefined);
+        setEndDate(undefined);
+        setFindCourse([]);
+        setSelectedCourses([]);
       }
     } catch (error) {
       console.log(error);
     }
   }
 
-  console.log(coupon?.start_date, "start_date");
+  const handleFindCourse = debounce(
+    async (e: React.ChangeEvent<HTMLInputElement>) => {
+      try {
+        const courseName = e.target.value;
+        const resp = await getAllCourses({ search: courseName });
+        setFindCourse(resp);
+      } catch (error) {
+        console.error("Error searching for courses:", error);
+      }
+    },
+    1000
+  );
+
+  const handleSelectCourse = (checked: boolean | string, course: ICourse) => {
+    if (checked) {
+      setSelectedCourses((prev) => [...prev, course]);
+    }
+    if (!checked) {
+      setSelectedCourses((prev) =>
+        prev.filter((item) => item._id !== course._id)
+      );
+    }
+  };
 
   return (
     <Form {...form}>
@@ -281,6 +320,46 @@ const NewCouponForm = ({coupon}: {coupon: ICoupon | undefined}) => {
                 <FormLabel>Khóa học</FormLabel>
                 <FormControl>
                   <Input placeholder="Tìm kiếm khóa học..." />
+                  {findCourse && findCourse.length > 0 && (
+                    <div className="flex flex-col gap-2 !mt-5">
+                      {findCourse?.map((course) => (
+                        <Label
+                          key={course.title}
+                          className="flex items-center gap-2 font-medium text-sm cursor-pointer"
+                          htmlFor={course.title}
+                        >
+                          <Checkbox
+                            id={course.title}
+                            onCheckedChange={(checked) =>
+                              handleSelectCourse(checked, course)
+                            }
+                            checked={selectedCourses.some(
+                              (el) => el._id === course._id
+                            )}
+                          />
+                          <span>{course.title}</span>
+                        </Label>
+                      ))}
+                    </div>
+                  )}
+                  {selectedCourses.length > 0 && (
+                    <div className="flex items-start flex-wrap gap-2 !mt-5">
+                      {selectedCourses?.map((course) => (
+                        <div
+                          key={course.title}
+                          className="inline-flex items-center gap-2 font-semibold text-sm px-3 py-1 rounded-lg border borderDarkMode bgDarkMode"
+                        >
+                          <span>{course.title}</span>
+                          <button
+                            type="button"
+                            onClick={() => handleSelectCourse(false, course)}
+                          >
+                            <IconClose className="size-5 text-gray-400 hover:text-gray-600" />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </FormControl>
                 <FormMessage />
               </FormItem>

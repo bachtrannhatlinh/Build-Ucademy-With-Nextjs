@@ -25,16 +25,14 @@ export async function getAllCourses(
 ): Promise<ICourse[] | undefined> {
   try {
     connectToDatabase();
-    const { limit = 10, page = 1, search, status } = params;
+    const { limit = 10, page = 1, search } = params;
     const skip = (page - 1) * limit;
     const query: FilterQuery<typeof Course> = {};
     if (search) {
       query.$or = [{ title: { $regex: search, $options: "i" } }];
     }
     
-    if (status && status !== CourseStatus.ALL) {
-      query.status = status;
-    }
+    query.status = CourseStatus.APPROVED;
 
     const courses = await Course.find(query)
       .skip(skip)
