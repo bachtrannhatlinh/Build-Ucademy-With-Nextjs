@@ -31,7 +31,6 @@ export type TGetAllCourseParams = {
   status?: string;
 };
 
-
 export type TCreateCourseParams = {
   title: string;
   slug: string;
@@ -47,13 +46,11 @@ export type TUpdateCourseLecture = {
   _id: string;
   title: string;
   lessons: ILesson[];
-}
+};
 
-
-export interface TCourseUpdateParams extends Omit<ICourse, "lectures"> { 
+export interface TCourseUpdateParams extends Omit<ICourse, "lectures"> {
   lectures: TUpdateCourseLecture[];
 }
-
 
 // Lecture
 export type TCreateLectureParams = {
@@ -87,7 +84,7 @@ export type TCourseUpdateContentParams = {
   _id: string;
   slug: string;
   lectures: ILecture[];
-}
+};
 
 export type TUpdateLessonParams = {
   lessonId: string;
@@ -111,4 +108,27 @@ export type TCreateHistoryParams = {
   path?: string;
 };
 
-export type { TActiveLinkProps, TMenuItem, TCreateUserParams, TCreateCourseParams, TUpdateCourseParams };
+// Coupon
+export type TCreateCouponParams = {
+  title: string;
+  code: string;
+  type: CouponType;
+  value?: number;
+  start_date?: Date;
+  end_date?: Date;
+  active?: boolean;
+  limit?: number;
+  courses?: string[];
+};
+
+export type TUpdateCouponParams = {
+  _id: string;
+  updateData: Partial<TCreateCouponParams>;
+};
+export type {
+  TActiveLinkProps,
+  TMenuItem,
+  TCreateUserParams,
+  TCreateCourseParams,
+  TUpdateCourseParams,
+};

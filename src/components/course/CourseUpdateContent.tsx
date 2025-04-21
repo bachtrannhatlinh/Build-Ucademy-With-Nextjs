@@ -20,8 +20,10 @@ import { ILesson } from "@/app/database/lesson.model";
 import { updateLesson } from "@/lib/actions/lession.actions";
 import slugify from "slugify";
 import LessonItemUpdate from "../lesson/LessonItemUpdate";
+import { useRouter } from "next/navigation";
 
 const CourseUpdateContent = ({ course }: { course: TCourseUpdateParams }) => {
+  const router = useRouter();
   const lectures = course.lectures || [];
   const [lectureEdit, setLectureEdit] = useState("");
   const [lectureIdEdit, setLectureIdEdit] = useState("");
@@ -39,6 +41,7 @@ const CourseUpdateContent = ({ course }: { course: TCourseUpdateParams }) => {
       if (res?.success) {
         toast.success(res.message);
       }
+      router.replace(`/manage/course/update-content?slug=${course.slug}`);
     } catch (error) {
       console.error("Error creating lecture:", error);
       toast.error("Có lỗi xảy ra khi tạo bài giảng mới");
@@ -108,6 +111,7 @@ const CourseUpdateContent = ({ course }: { course: TCourseUpdateParams }) => {
       if (res?.success) {
         toast.success(res.message);
       }
+      router.replace(`/manage/course/update-content?slug=${course.slug}`);
     } catch (error) {
       console.error("Error creating lecture:", error);
       toast.error("Có lỗi xảy ra khi tạo bài giảng mới");

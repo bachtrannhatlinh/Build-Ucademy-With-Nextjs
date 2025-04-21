@@ -20,7 +20,7 @@ const page = async() => {
   
   return (
     <div className='p-3'>
-      <Heading>Study Page</Heading>
+      <Heading>Khu vực học tập</Heading>
       <CourseGrid>
         {courses?.map((course) => (
           <CourseItem key={course.slug} course={course} />

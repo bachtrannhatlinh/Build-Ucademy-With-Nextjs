@@ -36,10 +36,10 @@ const LessonItemUpdate = ({ lesson }: { lesson: ILesson }) => {
         lower: true,
         locale: "vi",
         remove: /[*+-.~.()'"!:@]/g,
-      }),
-      duration: lesson.duration,
-      video_url: lesson.video_url,
-      content: lesson.content,
+      })  ,
+      duration: lesson.duration || 0,
+      video_url: lesson.video_url || "",
+      content: lesson.content || "",
     },
   });
 
@@ -204,6 +204,3 @@ const LessonItemUpdate = ({ lesson }: { lesson: ILesson }) => {
 };
 
 export default LessonItemUpdate;
-function handleUpdateLesson(arg0: boolean) {
-  throw new Error("Function not implemented.");
-}

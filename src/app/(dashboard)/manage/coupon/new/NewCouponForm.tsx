@@ -22,7 +22,7 @@ import {
 } from "@/components/ui/popover";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Switch } from "@/components/ui/switch";
-import { CouponType, couponTypes } from "@/constants";
+import { couponFormSchema, CouponType, couponTypes } from "@/constants";
 import { CalendarIcon } from "@radix-ui/react-icons";
 import { format } from "date-fns";
 import { useState } from "react";
@@ -33,38 +33,21 @@ import { getAllCourses } from "@/lib/actions/course.actions";
 import { ICourse } from "@/app/database/course.model";
 import { IconClose } from "@/components/icons";
 import { Checkbox, InputFormatCurrency } from "@/components/ui";
-const formSchema = z.object({
-  title: z
-    .string({
-      message: "Tiêu đề không được để trống",
-    })
-    .min(10, "Tiêu đề phải có ít nhất 10 ký tự"),
-  code: z
-    .string({
-      message: "Mã giảm giá không được để trống",
-    })
-    .min(3, "Mã giảm giá phải có ít nhất 3 ký tự")
-    .max(20, "Mã giảm giá không được quá 20 ký tự"),
-  startDate: z.string().optional(),
-  endDate: z.string().optional(),
-  active: z.boolean().optional(),
-  value: z.number().optional(),
-  type: z.string().optional(),
-  courses: z.array(z.string()).optional(),
-  limit: z.number().optional(),
-});
+import { useRouter } from "next/navigation";
+
 const NewCouponForm = () => {
+  const router = useRouter();
   const [startDate, setStartDate] = useState<Date | undefined>();
   const [endDate, setEndDate] = useState<Date | undefined>();
   const [findCourse, setFindCourse] = useState<ICourse[] | undefined>([]);
-  const [selectedCourses, setSelectedCourses] = useState<ICourse[]>([]);
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const [selectedCourses, setSelectedCourses] = useState<any[]>([]);
+  const form = useForm<z.infer<typeof couponFormSchema>>({
+    resolver: zodResolver(couponFormSchema),
     defaultValues: {
       title: "",
       code: "",
-      startDate: undefined,
-      endDate: undefined,
+      start_date: undefined,
+      end_date: undefined,
       active: true,
       value: 0,
       type: CouponType.PERCENT,
@@ -73,33 +56,35 @@ const NewCouponForm = () => {
     },
   });
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
-    const valuesToSend = {
-      ...values,
-      type: couponTypeWatch || CouponType.PERCENT,
-      start_date: startDate?.toISOString(),
-      end_date: endDate?.toISOString(),
-      courses: selectedCourses.map((course) => course._id),
-    };
+  async function onSubmit(values: z.infer<typeof couponFormSchema>) {
     try {
       const couponType = values.type;
+      const couponValue = Number(String(values.value)?.replace(/,/g, ""));
       if (
         couponType === CouponType.PERCENT &&
-        values?.value &&
-        (values?.value > 100 || values?.value < 0)
+        couponValue &&
+        (couponValue > 100 || couponValue < 0)
       ) {
         form.setError("value", {
           message: "Giá trị không hợp lệ",
         });
       }
-      const newCoupon = await createCoupon(valuesToSend);
+      console.log("value", couponValue);
+      const newCoupon = await createCoupon({
+        ...values,
+        value: couponValue,
+        type: values.type || CouponType.PERCENT,
+        start_date: startDate,
+        end_date: endDate,
+        courses: selectedCourses.map((course) => course._id),
+      });
+      if (newCoupon.error) {
+        toast.error(newCoupon.error);
+        return;
+      }
       if (newCoupon.code) {
         toast.success("Tạo mã giảm giá thành công");
-        form.reset();
-        setStartDate(undefined);
-        setEndDate(undefined);
-        setFindCourse([]);
-        setSelectedCourses([]);
+        router.push("/manage/coupon");
       }
     } catch (error) {
       console.log(error);
@@ -157,6 +142,7 @@ const NewCouponForm = () => {
                 <FormControl>
                   <Input
                     placeholder="Mã giảm giá"
+                    className="font-bold uppercase"
                     {...field}
                     onChange={(e) =>
                       field.onChange(e.target.value.toUpperCase())
@@ -169,7 +155,7 @@ const NewCouponForm = () => {
           />
           <FormField
             control={form.control}
-            name="startDate"
+            name="start_date"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Ngày bắt đầu</FormLabel>
@@ -201,7 +187,7 @@ const NewCouponForm = () => {
           />
           <FormField
             control={form.control}
-            name="endDate"
+            name="end_date"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Ngày kết thúc</FormLabel>
@@ -267,15 +253,14 @@ const NewCouponForm = () => {
                 <>
                   {couponTypeWatch === CouponType.PERCENT ? (
                     <Input
-                      type="number"
                       placeholder="100"
                       {...field}
-                      onChange={(e) => field.onChange(e.target.valueAsNumber)}
+                      onChange={(e) => field.onChange(e.target.value)}
                     />
                   ) : (
                     <InputFormatCurrency
                       {...field}
-                      onChange={(e) => field.onChange(parseInt(e.target.value))}
+                      onChange={(e) => field.onChange(e.target.value)}
                     />
                   )}
                 </>
@@ -376,7 +361,11 @@ const NewCouponForm = () => {
             )}
           />
         </div>
-        <Button variant="primary" className="w-[150px] ml-auto flex">
+        <Button
+          variant="primary"
+          type="submit"
+          className="w-[150px] ml-auto flex"
+        >
           Tạo mã
         </Button>
       </form>
