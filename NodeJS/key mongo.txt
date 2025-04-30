@@ -1,4 +1,0 @@
-sieutromkid1325
-exWPJtg6zCc13zAi
-
-mongodb+srv://sieutromkid1325:exWPJtg6zCc13zAi@cluster0.jkvc25a.mongodb.net/
