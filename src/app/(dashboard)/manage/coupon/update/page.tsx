@@ -7,7 +7,7 @@ const page = async ({ searchParams }: { searchParams: { code: string } }) => {
   return (
     <div>
       <Heading className="mb-10">Cập nhật mã giảm giá</Heading>
-      <UpdateCouponForm coupon={coupon} />
+      {coupon && <UpdateCouponForm coupon={coupon} />}
     </div>
   );
 };

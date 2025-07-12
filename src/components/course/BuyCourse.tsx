@@ -1,8 +1,9 @@
 import { TCourseUpdateParams } from "@/types";
-import React from "react";
+import React, { useState } from "react";
 import { IconPlay } from "../icons";
 import { Button } from "../ui";
 import Link from "next/link";
+import CouponForm from "@/components/coupon/CouponForm";
 
 const BuyCourse = ({
   courseDetails,
@@ -11,6 +12,9 @@ const BuyCourse = ({
   courseDetails: TCourseUpdateParams;
   onBuyLesson: () => Promise<void>;
 }) => {
+  const [price, setPrice] = useState<number>(courseDetails.price);
+  const [coupon, setCoupon] = useState("");
+
   if (courseDetails.lectures.length > 0) {
     return (
       <div className="bgDarkMode borderDarkMode rounded-lg border p-5">
@@ -28,7 +32,7 @@ const BuyCourse = ({
       <div className="bg-white p-5 rounded-lg">
         <div className="flex items-center gap-2 mb-3">
           <strong className="text-primary text-xl font-bold">
-            {courseDetails.price}
+            {courseDetails.price.toLocaleString("en-EN")}
           </strong>
           <span className="text-slate-400 line-through text-sm">
             {courseDetails.sale_price}
@@ -59,6 +63,12 @@ const BuyCourse = ({
         <Button className="bg-primary w-full mb-5" onClick={onBuyLesson}>
           Mua khoá học
         </Button>
+        <CouponForm
+           setCouponId={setCoupon}
+           originalPrice={price}
+           setPrice={setPrice}
+           courseId={courseDetails ? courseDetails._id : null}
+         ></CouponForm>
       </div>
     </>
   );

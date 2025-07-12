@@ -18,6 +18,10 @@ export async function POST(req: Request) {
 
     return NextResponse.json({ message: "User created successfully" });
   } catch (error) {
-    return NextResponse.json({ message: "Error saving user", error }, { status: 500 });
+    console.error("Error in register API:", error);
+    return NextResponse.json({ 
+      message: "Error saving user", 
+      error: process.env.NODE_ENV === 'development' ? error : 'Internal server error' 
+    }, { status: 500 });
   }
 }

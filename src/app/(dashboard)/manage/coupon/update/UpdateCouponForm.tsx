@@ -2,6 +2,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { useRouter } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
@@ -64,11 +65,15 @@ const NewCouponForm = ({ coupon }: { coupon: ICoupon }) => {
   });
 
   const couponTypeWatch = form.watch("type");
+  const router = useRouter();
 
   async function onSubmit(values: z.infer<typeof couponFormSchema>) {
     try {
       const couponType = values.type;
-      const couponValue = Number(String(values.value)?.replace(/,/g, ""));
+      const couponValue =
+        typeof values.value === "string" || typeof values.value === "number"
+          ? Number(String(values.value).replace(/,/g, ""))
+          : 0;
       if (
         couponType === CouponType.PERCENT &&
         couponValue &&
@@ -77,7 +82,9 @@ const NewCouponForm = ({ coupon }: { coupon: ICoupon }) => {
         form.setError("value", {
           message: "Giá trị không hợp lệ",
         });
+        return;
       }
+
       const updatedCoupon = await updateCoupon({
         _id: coupon?._id,
         updateData: {
@@ -88,11 +95,22 @@ const NewCouponForm = ({ coupon }: { coupon: ICoupon }) => {
           courses: selectedCourses,
         },
       });
-      if (updatedCoupon.code) {
-        toast.success("Cập nhật coupon thành công");
+
+      if (updatedCoupon.error) {
+        toast.error(updatedCoupon.error);
+        return;
       }
+
+      if (!updatedCoupon.code) {
+        toast.error("Cập nhật coupon thất bại");
+        return;
+      }
+
+      toast.success("Cập nhật coupon thành công");
+      router.push("/manage/coupon");
     } catch (error) {
       console.log(error);
+      toast.error("Có lỗi xảy ra khi cập nhật coupon");
     }
   }
 
@@ -267,14 +285,15 @@ const NewCouponForm = ({ coupon }: { coupon: ICoupon }) => {
                   <>
                     {couponTypeWatch === CouponType.PERCENT ? (
                       <Input
+                        type="number"
                         placeholder="100"
                         {...field}
-                        onChange={(e) => field.onChange(e.target.value)}
+                        onChange={(e) => field.onChange(Number(e.target.value))}
                       />
                     ) : (
                       <InputFormatCurrency
                         {...field}
-                        onChange={(e) => field.onChange(e.target.value)}
+                        onChange={(value) => field.onChange(Number(value))}
                       />
                     )}
                   </>

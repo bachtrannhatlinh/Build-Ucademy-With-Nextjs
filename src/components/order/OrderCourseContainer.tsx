@@ -26,10 +26,28 @@ import { cn } from "@/lib/utils";
 import { IconCheck, IconDelete } from "../icons";
 import { ApproveOrCancalOrder } from "@/lib/actions/order.actions";
 
+interface IOrderManageProps {
+  _id: string;
+  code: string;
+  total: number;
+  amount: number;
+  discount: number;
+  status: OrderStatus;
+  coupon: {
+    code: string;
+  };
+  course: {
+    title: string;
+  };
+  user: {
+    username: string;
+  };
+}
+
 const OrderCourseContainer = ({
   listOrder,
 }: {
-  listOrder: PopulatedOrderModelProps[];
+  listOrder: IOrderManageProps[];
 }) => {
   const router = useRouter();
   const pathname = usePathname();
@@ -101,7 +119,7 @@ const OrderCourseContainer = ({
           </TableRow>
         </TableHeader>
         <TableBody>
-          {listOrder.map((order: PopulatedOrderModelProps) => {
+          {listOrder.map((order: IOrderManageProps) => {
             const listStatusItem = orderStatus.find(
               (status) => status.value === order.status
             );
@@ -174,21 +192,6 @@ const OrderCourseContainer = ({
           })}
         </TableBody>
       </Table>
-
-      {/* <div className="flex justify-end gap-3 mt-5">
-        <button
-          className={cn(commonClassName.paginationButton)}
-          onClick={() => handleChangePage("prev")}
-        >
-          <IconLeftArrow />
-        </button>
-        <button
-          className={cn(commonClassName.paginationButton)}
-          onClick={() => handleChangePage("next")}
-        >
-          <IconRightArrow />
-        </button>
-      </div> */}
     </>
   );
 };

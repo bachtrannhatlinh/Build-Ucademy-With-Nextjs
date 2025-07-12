@@ -59,7 +59,10 @@ const NewCouponForm = () => {
   async function onSubmit(values: z.infer<typeof couponFormSchema>) {
     try {
       const couponType = values.type;
-      const couponValue = Number(String(values.value)?.replace(/,/g, ""));
+      const couponValue = typeof values.value === 'string' || typeof values.value === 'number'
+        ? Number(String(values.value).replace(/,/g, ""))
+        : 0;
+      
       if (
         couponType === CouponType.PERCENT &&
         couponValue &&
@@ -68,8 +71,8 @@ const NewCouponForm = () => {
         form.setError("value", {
           message: "Giá trị không hợp lệ",
         });
+        return;
       }
-      console.log("value", couponValue);
       const newCoupon = await createCoupon({
         ...values,
         value: couponValue,
@@ -253,14 +256,15 @@ const NewCouponForm = () => {
                 <>
                   {couponTypeWatch === CouponType.PERCENT ? (
                     <Input
+                      type="number"
                       placeholder="100"
                       {...field}
-                      onChange={(e) => field.onChange(e.target.value)}
+                      onChange={(e) => field.onChange(Number(e.target.value))}
                     />
                   ) : (
                     <InputFormatCurrency
                       {...field}
-                      onChange={(e) => field.onChange(e.target.value)}
+                      onChange={(value) => field.onChange(Number(value))}
                     />
                   )}
                 </>
